@@ -1,0 +1,26 @@
+{
+  "name": "gupy-back-end",
+  "version": "0.1.0",
+  "description": "Back-end. Provides a rest api for CRUD operations and saves into a PostgreSQL database.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/embatbr/gupy.git"
+  },
+  "author": {
+    "name": "Eduardo Tenório",
+    "email": "embatbr@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/embatbr/gupy/issues"
+  },
+  "homepage": "https://github.com/embatbr/gupy#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "restify": "^7.2.0"
+  }
+}

@@ -2,40 +2,56 @@
 
 Details in the [description file](./DESCRIPTION.md).
 
+## API
+
+### Endpoints
+
+- [X] /candidate
+- [ ] /candidates
+
+## Running
+
+### Locally
+
+- `npm start`
+
 ## Development
 
 ### Stages
 
 #### Stage 1
 
-- Create the endpoints for CRUD (POST, GET, PUT/PATCH and DELETE, maybe?);
-- Use a PostgreSQL database for persistency:
-    - Open connections simply (no need for connection pools for now).
-- Responses in JSON and as structured as possible;
-- Code as modular as possible and test the parts separately.
+- [X] Create the routes for CRUD (POST, GET, PUT and DELETE, respectively) for each endpoint;
+- [ ] Create the controllers for CRUD;
+- [ ] Use a PostgreSQL database for persistency:
+    - Create models.
+- [ ] Open database connections simply (no need for connection pools for now);
+- [ ] Responses in JSON and as structured as possible;
+- [ ] Code as modular as possible and test the parts separately.
 
 This stage
 
 #### Stage 2
 
-- Improve the Create part of the CRUD with insertion in batch (item 2 of the description):
-    - Keep response in JSON, as most logical as possible.
+- [ ] Improve the Create part of the CRUD with insertion in batch (item 2 of the description):
+    - Keep response in JSON, as most logical as possible;
+- [ ] Use connection pool for the database.
 
 #### Stage 3
 
-- Create a simple front-end (no need for frameworks, I think);
-- Use internationalization;
-- Show candidates on map:
+- [ ] Create a simple front-end (no need for frameworks, I think);
+    - Use internationalization;
+- [ ] Show candidates on map:
     - Research and map library (gmaps?);
     - Use QuintoAndar's map visualization as inspiration.
 
 #### Stage 4
 
-- Deploy on Heroku (I never used it).
+- [ ] Deploy on Heroku (I never used it).
 
 #### Stage 5
 
-- CD/CI using Travis (I never used it also).
+- [ ] CD/CI using Travis (I never used it also).
 
 ### Technicals
 
@@ -43,10 +59,10 @@ This stage
 
 Taken from [http://www.restapitutorial.com/lessons/httpmethods.html](http://www.restapitutorial.com/lessons/httpmethods.html)
 
-| HTTP Verb | CRUD | Entire Collection (e.g. /users) | Specific Item (e.g. /users/{id}) |
+| HTTP Verb | CRUD | Entire Collection (e.g. /candidates) | Specific Item (e.g. /candidates/{id}) |
 |-|-|-|-|
-| POST | Create | 201 (Created), 'Location' header with link to /users/{id} containing new ID. | 404 (Not Found), 409 (Conflict) if resource already exists. |
-| GET | Read | 200 (OK), list of users. Use pagination, sorting and filtering to navigate big lists. | 200 (OK), single user. 404 (Not Found), if ID not found or invalid. |
+| POST | Create | 201 (Created), 'Location' header with link to /candidates/{id} containing new ID. | 404 (Not Found), 409 (Conflict) if resource already exists. |
+| GET | Read | 200 (OK), list of candidates. Use pagination, sorting and filtering to navigate big lists. | 200 (OK), single candidate. 404 (Not Found), if ID not found or invalid. |
 | PUT | Update/Replace | 405 (Method Not Allowed), unless you want to update/replace every resource in the entire collection. | 200 (OK) or 204 (No Content). 404 (Not Found), if ID not found or invalid. |
 | PATCH | Update/Modify | 405 (Method Not Allowed), unless you want to modify the collection itself. | 200 (OK) or 204 (No Content). 404 (Not Found), if ID not found or invalid. |
 | DELETE | Delete | 405 (Method Not Allowed), unless you want to delete the whole collection—not often desirable. | 200 (OK). 404 (Not Found), if ID not found or invalid. |
