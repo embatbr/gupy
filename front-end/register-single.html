@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Gupy - Register a single profile</title>
+
+    <style>
+      form {
+        width: 420px;
+      }
+      div {
+        margin-bottom: 20px;
+      }
+      label {
+        display: inline-block;
+        width: 240px;
+        text-align: right;
+        padding-right: 10px;
+      }
+      button, input {
+        float: right;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Gupy - Register a single profile</h1>
+    <h4>
+      <a href="./index.html">back</a>
+    </h4>
+
+    <form action="http://localhost:8000/candidate" method="post">
+      <div>
+        <label for="name">Name</label>
+        <input name="name" id="name">
+      </div>
+      <div>
+        <label for="image">Photo</label>
+        <input name="image" id="image">
+      </div>
+      <div>
+        <label for="birthdate">Birthdate</label>
+        <input name="birthdate" id="birthdate">
+      </div>
+      <div>
+        <label for="gender">Gender</label>
+        <input name="gender" id="gender">
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input name="email" id="email">
+      </div>
+      <div>
+        <label for="phone">Phone</label>
+        <input name="phone" id="phone">
+      </div>
+      <div>
+        <label for="address">Address</label>
+        <input name="address" id="address">
+      </div>
+
+      <div>
+        <button>Register</button>
+      </div>
+    </form>
+  </body>
+</html>
