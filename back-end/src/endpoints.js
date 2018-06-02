@@ -1,23 +1,27 @@
-"use strict";
+'use strict';
 
 
 module.exports = {
-    "candidate": {
-        "POST": {
+    'candidate': [
+        {
+            'verb': 'POST',
             'method': 'post',
             'action': 'create'
         },
-        "GET": {
+        {
+            'verb': 'GET',
             'method': 'get',
             'action': 'read'
         },
-        "PUT": {
+        {
+            'verb': 'PUT',
             'method': 'put',
             'action': 'update'
         },
-        "DELETE": {
+        {
+            'verb': 'DELETE',
             'method': 'del',
             'action': 'delete'
         }
-    }
+    ]
 };
