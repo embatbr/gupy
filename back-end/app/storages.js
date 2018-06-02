@@ -28,25 +28,121 @@ function FileHandler(settings) {
 
 function Database(settings) {
     this.db = pgp(settings.connection);
+
     this.queries = {
-        candidates: {
-            fields: [
-                'name', 'image_path', 'birthdate', 'gender', 'email', 'phone', 'tags'
-            ],
-            positions: [
-                '$1', '$2', '$3', '$4', '$5', '$6', '$7'
-            ]
-        }
+        create_profile_and_address: `BEGIN;
+
+WITH address_row AS (
+    INSERT INTO
+        recruitment.addresses (
+            state,
+            city,
+            neighborhood,
+            place_name,
+            place_number,
+            place_complement,
+            cep,
+            latitude,
+            longitude
+        )
+    VALUES (
+        $8,
+        $9,
+        $10,
+        $11,
+        $12,
+        $13,
+        $14,
+        $15,
+        $16
+    )
+    RETURNING id
+)
+INSERT INTO
+    recruitment.candidates (
+        name,
+        image_path,
+        birthdate,
+        gender,
+        email,
+        phone,
+        address_id,
+        tags
+    )
+VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6,
+    (SELECT id FROM address_row),
+    $7
+);
+
+COMMIT;`,
+        create_professional_experience: `INSERT INTO
+    recruitment.professional_experiences (
+        company_name,
+        job,
+        start_date,
+        end_date,
+        description,
+        candidate_email
+    )
+VALUES
+`,
+        create_educational_experience: `INSERT INTO
+    recruitment.educational_experiences (
+        institution_name,
+        title,
+        start_date,
+        end_date,
+        candidate_email
+    )
+VALUES
+`,
+        rollback: `BEGIN;
+
+DELETE FROM
+    recruitment.educational_experiences
+WHERE
+    candidate_email = $1;
+
+DELETE FROM
+    recruitment.professional_experiences
+WHERE
+    candidate_email = $1;
+
+WITH deleted_candidate AS (
+    DELETE FROM
+        recruitment.candidates
+    WHERE
+        email = $1
+    RETURNING address_id
+)
+DELETE FROM
+    recruitment.addresses
+WHERE
+    id = (
+        SELECT
+            address_id
+        FROM
+            deleted_candidate
+    );
+
+COMMIT;
+`
     };
 
-    this.insert = (table, values) => {
-        let fields = this.queries[table].fields.join(', ');
-        let positions = this.queries[table].positions.join(', ');
+    this.insert_single = (action, values) => {
+        return this.db.none(this.queries[action], values);
+    };
 
-        let query = `INSERT INTO recruitment.${table}(${fields}) VALUES (${positions})`;
-        console.log(query);
+    this.insert_multiple = (action, values) => {
+        let query = `${this.queries[action]} ${values}`
 
-        return this.db.none(query, values);
+        return this.db.none(query);
     };
 };
 

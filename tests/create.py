@@ -43,17 +43,18 @@ resp = r.post(
             'neighborhood': 'Bela Vista',
             'place_name': 'Av. Paulista',
             'place_number': '1000',
-            'place_complement': 'apartment 10',
+            'place_complement': 'apartmento 10',
             'cep': '01310-100',
             'latitude': -23.5647577,
             'longitude': -46.6518495
         }),
         'tags': json.dumps(['python', 'java']),
-        'professional_experiences': [
+        'professional_experiences': json.dumps([
             {
                 'company_name': 'Gupy',
                 'job': 'Developer',
                 'start_date': '2017-09-15',
+                'end_date': None,
                 'description': 'developer stuff too, but with more money'
             },
             {
@@ -70,12 +71,13 @@ resp = r.post(
                 'end_date': None,
                 'description': 'making some money occasionally'
             }
-        ],
-        'educational_experiences': [
+        ]),
+        'educational_experiences': json.dumps([
             {
                 'institution_name': 'Random MBA College',
                 'title': 'MBA',
-                'start_date': '2018-02-01'
+                'start_date': '2018-02-01',
+                'end_date': None
             },
             {
                 'institution_name': 'not MIT',
@@ -83,7 +85,7 @@ resp = r.post(
                 'start_date': '2010-02-01',
                 'end_date': '2015-05-20'
             }
-        ]
+        ])
     }
 )
 

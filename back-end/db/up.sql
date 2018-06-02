@@ -4,28 +4,27 @@ BEGIN;
 CREATE SCHEMA recruitment;
 
 
--- CREATE TYPE recruitment.brazilian_state AS ENUM ('AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
---                                      'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
---                                      'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO');
+CREATE TYPE recruitment.brazilian_state AS ENUM ('AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+                                     'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
+                                     'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO');
 
--- CREATE TABLE recruitment.addresses (
---     id SERIAL NOT NULL,
+CREATE TABLE recruitment.addresses (
+    id SERIAL NOT NULL,
 
---     state recruitment.brazilian_state NOT NULL,
---     city VARCHAR(255) NOT NULL,
---     neighborhood VARCHAR(255),
---     place_name VARCHAR(255) NOT NULL, -- euivalent to "logradouro"
---     place_number INTEGER,
---     place_complement VARCHAR(255),
+    state recruitment.brazilian_state NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    neighborhood VARCHAR(255) NOT NULL,
+    place_name VARCHAR(255) NOT NULL, -- euivalent to "logradouro"
+    place_number INTEGER NOT NULL,
+    place_complement VARCHAR(255) NOT NULL,
 
---     cep CHAR(9), -- format: ABCDE-FGH
+    cep CHAR(9) NOT NULL, -- format: ABCDE-FGH
 
---     latitude NUMERIC(8,6), -- 6 decimal places gives a precision of 4 inches
---     longitude NUMERIC(9,6), -- 6 decimal places gives a precision of 4 inches
+    latitude NUMERIC(8,6) NOT NULL, -- 6 decimal places gives a precision of 4 inches
+    longitude NUMERIC(9,6) NOT NULL, -- 6 decimal places gives a precision of 4 inches
 
---     PRIMARY KEY (id),
---     UNIQUE (state, city, neighborhood, place_name, place_number, place_complement)
--- );
+    PRIMARY KEY (id)
+);
 
 
 CREATE TYPE recruitment.candidate_gender AS ENUM ('MALE', 'FEMALE');
@@ -37,44 +36,43 @@ CREATE TABLE recruitment.candidates (
     gender recruitment.candidate_gender NOT NULL,
     email VARCHAR(254) NOT NULL,
     phone VARCHAR(11) NOT NULL,
-    -- address_id INTEGER NOT NULL,
+    address_id INTEGER NOT NULL,
     tags jsonb NOT NULL,
 
-    PRIMARY KEY (email)
-    -- PRIMARY KEY (email),
-    -- FOREIGN KEY (address_id) REFERENCES recruitment.addresses (id)
+    PRIMARY KEY (email),
+    FOREIGN KEY (address_id) REFERENCES recruitment.addresses (id)
 );
 
 
--- CREATE TABLE recruitment.professional_experiences (
---     id SERIAL NOT NULL,
+CREATE TABLE recruitment.professional_experiences (
+    id SERIAL NOT NULL,
 
---     company_name VARCHAR(255) NOT NULL,
---     job VARCHAR(255) NOT NULL,
---     start_date DATE NOT NULL,
---     end_date DATE, -- a null value means 'currently employed by the company'
---     description TEXT,
+    company_name VARCHAR(255) NOT NULL,
+    job VARCHAR(255) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE, -- a null value means 'currently employed by the company'
+    description TEXT NOT NULL,
 
---     candidate_email VARCHAR(254) NOT NULL,
+    candidate_email VARCHAR(254) NOT NULL,
 
---     PRIMARY KEY (id),
---     FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
--- );
+    PRIMARY KEY (id),
+    FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
+);
 
 
--- CREATE TABLE recruitment.educational_experiences (
---     id SERIAL NOT NULL,
+CREATE TABLE recruitment.educational_experiences (
+    id SERIAL NOT NULL,
 
---     institution_name VARCHAR(255) NOT NULL,
---     title VARCHAR(255), -- a high school may have this field as null
---     start_date DATE NOT NULL,
---     end_date DATE, -- a null value means 'currently employed by the company'
+    institution_name VARCHAR(255) NOT NULL,
+    title VARCHAR(255), -- a high school may have this field as null
+    start_date DATE NOT NULL,
+    end_date DATE, -- a null value means 'currently employed by the company'
 
---     candidate_email VARCHAR(254) NOT NULL,
+    candidate_email VARCHAR(254) NOT NULL,
 
---     PRIMARY KEY (id),
---     FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
--- );
+    PRIMARY KEY (id),
+    FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
+);
 
 
 COMMIT;
