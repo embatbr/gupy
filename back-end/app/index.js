@@ -6,7 +6,7 @@ const restify = require("restify");
 const settings = require('./settings')
 const endpoints = require('./endpoints');
 let logics = require('./logics');
-const databases = require('./databases');
+const storages = require('./storages');
 
 
 function Application(settings, endpoints) {
@@ -15,7 +15,7 @@ function Application(settings, endpoints) {
 
     this.server = restify.createServer();
 
-    this.run = (logics) => {
+    this.run = (logics, file_handler, database) => {
         this.server.use(restify.plugins.bodyParser({
             mapParams: true
         }));
@@ -27,7 +27,7 @@ function Application(settings, endpoints) {
                 const method = obj['method'];
                 const action = obj['action'];
 
-                let logic = new logics[endpoint]();
+                let logic = new logics[endpoint](file_handler, database);
                 this.server[method](`/${endpoint}`, logic[action]);
             });
         }
@@ -39,7 +39,8 @@ function Application(settings, endpoints) {
 };
 
 
-let Database = new databases.Database(settings.database);
+let file_handler = new storages.FileHandler(settings.file_handler);
+let database = new storages.Database(settings.database);
 
 var app = new Application(settings.app, endpoints);
-app.run(logics);
+app.run(logics, file_handler, database);

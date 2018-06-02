@@ -1,20 +1,20 @@
 BEGIN;
 
 
-DROP TABLE recruitment.education;
+DROP TABLE IF EXISTS recruitment.educational_experiences;
 
-DROP TABLE recruitment.professional_experiences;
+DROP TABLE IF EXISTS recruitment.professional_experiences;
 
-DROP TABLE recruitment.candidates;
+DROP TABLE IF EXISTS recruitment.candidates;
 
-DROP TYPE recruitment.candidate_gender;
+DROP TYPE IF EXISTS recruitment.candidate_gender;
 
-DROP TABLE recruitment.addresses;
+DROP TABLE IF EXISTS recruitment.addresses;
 
-DROP TYPE recruitment.brazilian_state;
+DROP TYPE IF EXISTS recruitment.brazilian_state;
 
 
-DROP SCHEMA recruitment CASCADE;
+DROP SCHEMA IF EXISTS recruitment CASCADE;
 
 
 COMMIT;

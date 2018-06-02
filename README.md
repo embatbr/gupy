@@ -27,7 +27,7 @@ and choose one of the actions below:
 To execute the back-end application:
 
 ```
-npm start
+./startup.sh
 ```
 
 And to use the webpage, open the file *front-end/index.html*.
@@ -39,11 +39,12 @@ And to use the webpage, open the file *front-end/index.html*.
 #### Stage 1
 
 - [X] Create the routes for CRUD (POST, GET, PUT and DELETE, respectively) for each endpoint;
-- [ ] Create the controllers for CRUD;
-- [ ] Use a PostgreSQL database for persistency:
-    - Create models.
-- [ ] Responses in JSON and as structured as possible;
-- [ ] Code as modular as possible and test the parts separately.
+- [ ] Create the controllers for CRUD:
+    - [X] Create
+    - [ ] Read
+    - [ ] Update
+    - [ ] Delete
+- [X] Use a PostgreSQL database for persistency:
 
 This stage
 
@@ -51,8 +52,7 @@ This stage
 
 - [ ] Improve the Create part of the CRUD with insertion in batch (item 2 of the description):
     - Keep response in JSON, as most logical as possible;
-- [ ] Use connection pool for the database;
-- [ ] User some logging library.
+- [X] Use connection pool for the database;
 
 #### Stage 3
 
