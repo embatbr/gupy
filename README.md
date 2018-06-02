@@ -11,6 +11,15 @@ Details in the [description file](./DESCRIPTION.md).
 
 ## Running
 
+In any scenario, the database creation is necessary before run the system. The script *back-end/db/actions.sh* contains options to:
+
+- `create` user and database;
+- `drop` user and database;
+- `up` and `down` schemas and tables;
+- `access` the database (using psql).
+
+Just type in the terminal `./action.sh <ACTION>`
+
 ### Locally
 
 - `npm start`
@@ -35,7 +44,8 @@ This stage
 
 - [ ] Improve the Create part of the CRUD with insertion in batch (item 2 of the description):
     - Keep response in JSON, as most logical as possible;
-- [ ] Use connection pool for the database.
+- [ ] Use connection pool for the database;
+- [ ] User some logging library.
 
 #### Stage 3
 
