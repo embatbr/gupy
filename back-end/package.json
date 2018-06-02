@@ -2,9 +2,9 @@
   "name": "gupy-back-end",
   "version": "0.1.0",
   "description": "Back-end. Provides a rest api for CRUD operations and saves into a PostgreSQL database.",
-  "main": "src/app.js",
+  "main": "app/index.js",
   "scripts": {
-    "start": "node src/app.js"
+    "start": "node app/index.js"
   },
   "repository": {
     "type": "git",

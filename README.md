@@ -11,18 +11,26 @@ Details in the [description file](./DESCRIPTION.md).
 
 ## Running
 
-In any scenario, the database creation is necessary before run the system. The script *back-end/db/actions.sh* contains options to:
+In any scenario, the database creation is necessary before running the system. Inside directory *back-end*, just type in the terminal
+
+```
+./db/action.sh <ACTION>
+```
+
+and choose one of the actions below:
 
 - `create` user and database;
 - `drop` user and database;
 - `up` and `down` schemas and tables;
 - `access` the database (using psql).
 
-Just type in the terminal `./action.sh <ACTION>`
+To execute the back-end application:
 
-### Locally
+```
+npm start
+```
 
-- `npm start`
+And to use the webpage, open the file *front-end/index.html*.
 
 ## Development
 
@@ -34,7 +42,6 @@ Just type in the terminal `./action.sh <ACTION>`
 - [ ] Create the controllers for CRUD;
 - [ ] Use a PostgreSQL database for persistency:
     - Create models.
-- [ ] Open database connections simply (no need for connection pools for now);
 - [ ] Responses in JSON and as structured as possible;
 - [ ] Code as modular as possible and test the parts separately.
 

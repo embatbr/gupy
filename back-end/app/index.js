@@ -9,7 +9,7 @@ let logics = require('./logics');
 const databases = require('./databases');
 
 
-function RESTfulApp(settings, endpoints) {
+function Application(settings, endpoints) {
     this.port = settings.port;
     this.endpoints = endpoints
 
@@ -27,7 +27,7 @@ function RESTfulApp(settings, endpoints) {
                 const method = obj['method'];
                 const action = obj['action'];
 
-                let logic = new logics[`${endpoint}`]();
+                let logic = new logics[endpoint]();
                 this.server[method](`/${endpoint}`, logic[action]);
             });
         }
@@ -41,5 +41,5 @@ function RESTfulApp(settings, endpoints) {
 
 let Database = new databases.Database(settings.database);
 
-var app = new RESTfulApp(settings.app, endpoints);
+var app = new Application(settings.app, endpoints);
 app.run(logics);
