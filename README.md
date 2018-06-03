@@ -2,6 +2,8 @@
 
 Details in the [description file](./DESCRIPTION.md).
 
+OBS: I created a branch **python-attempt**, to redo the challenge in a more suitable language. This will soon be pushed.
+
 ## API
 
 ### Endpoints
