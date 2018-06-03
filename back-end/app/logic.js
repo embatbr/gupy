@@ -43,22 +43,23 @@ let has_payload = (body, response) => {
 
 
 function CandidateLogic(file_handler, database) {
-    this.__create = (body, response, next) => {
-        let address = JSON.parse(body.address);
+    this.__create = (batch_payload, response, next) => {
+        let batch_values = new Array();
 
-        database.register_candidate([
-            {
+        batch_payload.forEach((payload) => {
+            let address = JSON.parse(payload.address);
+            batch_values.push({
                 candidate: [
-                    body.email,
-                    body.name,
-                    get_image_path(body),
-                    body.birthdate,
-                    body.gender.toUpperCase(),
-                    body.phone,
-                    body.tags
+                    payload.email,
+                    payload.name,
+                    get_image_path(payload),
+                    payload.birthdate,
+                    payload.gender.toUpperCase(),
+                    payload.phone,
+                    payload.tags
                 ],
                 address: [
-                    body.email,
+                    payload.email,
                     address.state,
                     address.city,
                     address.neighborhood,
@@ -69,12 +70,16 @@ function CandidateLogic(file_handler, database) {
                     address.latitude,
                     address.longitude
                 ],
-                professional_experiences: experience_it(JSON.parse(body.professional_experiences), body.email),
-                educational_experiences: experience_it(JSON.parse(body.educational_experiences), body.email)
-            }
-        ])
-        .then((data) => {
-            file_handler.save(get_image_path(body), body.image_data);
+                professional_experiences: experience_it(JSON.parse(payload.professional_experiences), payload.email),
+                educational_experiences: experience_it(JSON.parse(payload.educational_experiences), payload.email)
+            });
+        });
+
+        database.register_candidate(batch_values)
+        .then((_) => {
+            batch_payload.forEach((payload) => {
+                file_handler.save(get_image_path(payload), payload.image_data);
+            });
 
             response.send({
                 status: 'success'
@@ -97,7 +102,7 @@ function CandidateLogic(file_handler, database) {
             return
         }
 
-        this.__create(body, response, next);
+        this.__create([body], response, next);
     }
 
     this.create_batch = (request, response, next) => {
