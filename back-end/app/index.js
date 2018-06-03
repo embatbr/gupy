@@ -39,7 +39,7 @@ function Application(settings, endpoints) {
 };
 
 
-let file_handler = new storages.FileHandler(settings.file_handler);
+let file_handler = new storages.FileHandler();
 let database = new storages.Database(settings.database);
 
 var app = new Application(settings.app, endpoints);

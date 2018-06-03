@@ -2,9 +2,6 @@
 
 
 module.exports = {
-    file_handler: {
-        root_path: process.env.PROJECT_ROOT_PATH
-    },
     database: {
         connection: {
             host: process.env.DB_HOST || 'localhost',

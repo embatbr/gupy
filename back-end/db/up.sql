@@ -4,12 +4,28 @@ BEGIN;
 CREATE SCHEMA recruitment;
 
 
+CREATE TYPE recruitment.candidate_gender AS ENUM ('MALE', 'FEMALE');
+
+CREATE TABLE recruitment.candidates (
+    email VARCHAR(254) NOT NULL,
+
+    name VARCHAR(255) NOT NULL,
+    image_path VARCHAR(255) NOT NULL, -- path to image file
+    birthdate DATE NOT NULL,
+    gender recruitment.candidate_gender NOT NULL,
+    phone VARCHAR(11) NOT NULL,
+    tags jsonb NOT NULL,
+
+    PRIMARY KEY (email)
+);
+
+
 CREATE TYPE recruitment.brazilian_state AS ENUM ('AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
                                      'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
                                      'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO');
 
 CREATE TABLE recruitment.addresses (
-    id SERIAL NOT NULL,
+    candidate_email VARCHAR(254) NOT NULL, -- unusual, but easier to deal with
 
     state recruitment.brazilian_state NOT NULL,
     city VARCHAR(255) NOT NULL,
@@ -23,24 +39,7 @@ CREATE TABLE recruitment.addresses (
     latitude NUMERIC(8,6) NOT NULL, -- 6 decimal places gives a precision of 4 inches
     longitude NUMERIC(9,6) NOT NULL, -- 6 decimal places gives a precision of 4 inches
 
-    PRIMARY KEY (id)
-);
-
-
-CREATE TYPE recruitment.candidate_gender AS ENUM ('MALE', 'FEMALE');
-
-CREATE TABLE recruitment.candidates (
-    name VARCHAR(255) NOT NULL,
-    image_path VARCHAR(255) NOT NULL, -- path to image file
-    birthdate DATE NOT NULL,
-    gender recruitment.candidate_gender NOT NULL,
-    email VARCHAR(254) NOT NULL,
-    phone VARCHAR(11) NOT NULL,
-    address_id INTEGER NOT NULL,
-    tags jsonb NOT NULL,
-
-    PRIMARY KEY (email),
-    FOREIGN KEY (address_id) REFERENCES recruitment.addresses (id)
+    PRIMARY KEY (candidate_email)
 );
 
 

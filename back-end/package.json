@@ -21,6 +21,8 @@
   "homepage": "https://github.com/embatbr/gupy#readme",
   "devDependencies": {},
   "dependencies": {
+    "mkdirp": "^0.5.1",
+    "path": "^0.12.7",
     "pg-promise": "^8.4.4",
     "restify": "^7.2.0"
   }

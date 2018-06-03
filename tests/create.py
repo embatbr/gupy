@@ -25,7 +25,7 @@ db_conn_settings = {
 }
 
 name = uuid.uuid4().hex
-(first_name, last_name) = (name[ : random.randint(3, 5)], name[random.randint(5, 10) : random.randint(10, 15)])
+(first_name, last_name) = (name[ : random.randint(3, 5)], name[random.randint(5, 10) : random.randint(15, 20)])
 
 resp = r.post(
     'http://{host}:{port}/candidate'.format(**app_conn_settings),
