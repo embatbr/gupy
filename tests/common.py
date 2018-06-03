@@ -5,7 +5,6 @@
 import base64
 import json
 import os
-import psycopg2
 import random
 import requests as r
 import uuid
@@ -23,3 +22,12 @@ db_conn_settings = {
     'user': os.environ.get('DB_USER', 'gupy'),
     'password': os.environ.get('DB_PASSWORD', 'gupy')
 }
+
+
+def dimension_name():
+    letter = chr(random.randint(65, 90))
+    number = random.randint(1, 100000)
+    return '%s%d' % (letter, number)
+
+def photo_name():
+    return 'rick-%d.png' % random.randint(1, 9)

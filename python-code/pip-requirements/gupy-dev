@@ -2,3 +2,4 @@ falcon
 ujson
 cython
 gunicorn
+psycopg2
