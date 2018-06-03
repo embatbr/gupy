@@ -10,7 +10,7 @@ CREATE TABLE recruitment.candidates (
     email VARCHAR(254) NOT NULL,
 
     name VARCHAR(255) NOT NULL,
-    image_path VARCHAR(255) NOT NULL, -- path to image file
+    image_path VARCHAR(255), -- path to image file
     birthdate DATE NOT NULL,
     gender recruitment.candidate_gender NOT NULL,
     phone VARCHAR(11) NOT NULL,

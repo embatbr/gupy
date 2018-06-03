@@ -7,6 +7,7 @@ const _path = require('path');
 const pgp = require('pg-promise')({
     capSQL: true
 });
+const unzip = require('unzip');
 
 
 let __query_prefix = 'INSERT INTO recruitment.';
@@ -28,6 +29,33 @@ function FileHandler() {
     this.remove = (file_path) => {
         _fs.unlinkSync(file_path);
     }
+
+    this.read_zip = (file_path) => {
+        let dir_path = file_path.slice(0, -'.zip'.length);
+
+        let jsons = {};
+        let images = {};
+
+        let pipezip = _fs.createReadStream(file_path).pipe(unzip.Parse());
+
+        pipezip.on('entry', (entry) => {
+            let pipe_file_name = entry.path;
+            let pipe_file_path = `${dir_path}-${pipe_file_name}`
+
+            entry.pipe(_fs.createWriteStream(pipe_file_path));
+
+            if(pipe_file_name.endsWith('.json')) {
+                jsons[pipe_file_name] = pipe_file_path;
+            }
+            else {
+                images[pipe_file_name] = pipe_file_path;
+            }
+
+            entry.autodrain();
+        });
+
+        return [pipezip, jsons, images];
+    };
 };
 
 

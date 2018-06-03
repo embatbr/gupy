@@ -2,6 +2,10 @@
 
 
 let get_image_path = (data) => {
+    if(data.image_name == undefined) {
+        return null;
+    }
+
     let email_base64 = new Buffer(data.email).toString('base64');
     return `resources/images/${email_base64}-${data.image_name}`;
 };
@@ -78,7 +82,9 @@ function CandidateLogic(file_handler, database) {
         database.register_candidate(batch_values)
         .then((_) => {
             batch_payload.forEach((payload) => {
-                file_handler.save(get_image_path(payload), payload.image_data);
+                if(payload.image_data != undefined) {
+                    file_handler.save(get_image_path(payload), payload.image_data);
+                }
             });
 
             response.send({
@@ -107,7 +113,6 @@ function CandidateLogic(file_handler, database) {
 
     this.create_batch = (request, response, next) => {
         let body = request.body;
-        console.log(body);
 
         if(!has_payload(body, response)) {
             return
@@ -115,9 +120,21 @@ function CandidateLogic(file_handler, database) {
 
         let file_path = get_file_path();
         file_handler.save(file_path, body.file_data);
+        let [pipezip, jsons, images] = file_handler.read_zip(file_path);
 
-        console.log(file_path);
-        response.send({});
+        pipezip.on('close', (d) => {
+            file_handler.remove(file_path);
+
+            console.log('jsons:', jsons);
+            console.log('images:', images);
+
+            // let batch_payload = new Array();
+            // jsons.forEach((json) => {
+            //     json.image_data
+            // });
+
+            response.send({});
+        });
     };
 };
 
