@@ -54,7 +54,7 @@ test('POST should return 400 when body is an empty JSON', resp.status_code, 400)
 
 name = 'Rick Sanchez %s' % dimension_name()
 photo = photo_name()
-email = '%s@citadel_of_ricks.com' % name.lower().replace(' ', '.')
+email = email_address(name)
 
 resp = r.post(
     'http://{host}:{port}/candidate'.format(**app_conn_settings),

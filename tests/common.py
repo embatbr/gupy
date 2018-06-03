@@ -31,3 +31,7 @@ def dimension_name():
 
 def photo_name():
     return 'rick-%d.png' % random.randint(1, 9)
+
+def email_address(name):
+    username = '.'.join(name.split(' ')[::-1]).lower()
+    return '%s@citadel_of_ricks.com' % username

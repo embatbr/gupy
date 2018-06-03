@@ -2,6 +2,12 @@
 """
 
 
+import base64
+
+
+str2base64 = lambda s: base64.b64encode(bytes(s.encode('utf-8'))).decode('utf-8')
+
+
 class Model(object):
     def __init__(self, _pg_schema_name, _pg_table_name, fields=dict):
         self._pg_schema_name = _pg_schema_name
@@ -29,7 +35,7 @@ class CandidateModel(Model):
     def __init__(self, name, image_name, birthdate, gender, email, phone):
         super(CandidateModel, self).__init__('recruitment', 'candidates', {
             'name': name,
-            'image_name': image_name,
+            'image_name': '%s_%s' % (str2base64(email), image_name),
             'birthdate': birthdate,
             'gender': gender.upper(),
             'email': email.lower(),

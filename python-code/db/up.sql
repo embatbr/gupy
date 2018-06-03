@@ -18,7 +18,8 @@ CREATE TABLE recruitment.candidates (
     phone VARCHAR(11) NOT NULL,
     -- tags jsonb NOT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (email)
 );
 
 
