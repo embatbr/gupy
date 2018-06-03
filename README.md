@@ -27,10 +27,9 @@ and choose one of the actions below:
 To execute the back-end application:
 
 ```
+npm install # this just need to be executed once
 ./startup.sh
 ```
-
-And to use the webpage, open the file *front-end/index.html*.
 
 ## Development
 
