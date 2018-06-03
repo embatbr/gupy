@@ -60,7 +60,7 @@ resp = r.post(
             },
             {
                 'institution_name': 'not MIT',
-                'title': 'Computer Cience',
+                'title': 'Computer Science',
                 'start_date': '2010-02-01',
                 'end_date': '2015-05-20'
             }

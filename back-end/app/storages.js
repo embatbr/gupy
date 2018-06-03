@@ -9,6 +9,9 @@ const pgp = require('pg-promise')({
 });
 
 
+let __query_prefix = 'INSERT INTO recruitment.';
+
+
 function FileHandler() {
     this.save = (file_path, file_data) => {
         mkdirp(_path.dirname(file_path));
@@ -31,25 +34,32 @@ function FileHandler() {
 function Database(settings) {
     this.db = pgp(settings.connection);
 
-    this.register_single_candidate = (values) => {
+    this.register_candidate = (batch_values) => {
         return this.db.tx((t) => {
-            let batch = [
-                t.none('INSERT INTO recruitment.candidates VALUES ($1, $2, $3, $4, $5, $6, $7)',
-                       values.candidate),
-                t.none('INSERT INTO recruitment.addresses VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-                       values.address)
-            ];
+            let batch = new Array();
 
-            let experiences = ['professional_experiences', 'educational_experiences'];
+            batch_values.forEach((values) => {
+                batch.push(
+                    t.none(`${__query_prefix}candidates VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+                           values.candidate)
+                );
+                batch.push(
+                    t.none(`${__query_prefix}addresses VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+                           values.address)
+                );
 
-            experiences.forEach((experience) => {
-                values[experience].forEach((experience_details) => {
-                    batch.push(t.none(
-                        `INSERT INTO recruitment.${experience} VALUES ($1, $2, $3, $4, $5, $6)`,
-                        experience_details
-                    ));
+                let experiences = ['professional_experiences', 'educational_experiences'];
+
+                experiences.forEach((experience) => {
+                    values[experience].forEach((experience_details) => {
+                        batch.push(t.none(
+                            `${__query_prefix}${experience} VALUES ($1, $2, $3, $4, $5, $6)`,
+                            experience_details
+                        ));
+                    });
                 });
             });
+
 
             return t.batch(batch);
         });

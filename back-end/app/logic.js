@@ -46,31 +46,33 @@ function CandidateLogic(file_handler, database) {
     this.__create = (body, response, next) => {
         let address = JSON.parse(body.address);
 
-        database.register_single_candidate({
-            candidate: [
-                body.email,
-                body.name,
-                get_image_path(body),
-                body.birthdate,
-                body.gender.toUpperCase(),
-                body.phone,
-                body.tags
-            ],
-            address: [
-                body.email,
-                address.state,
-                address.city,
-                address.neighborhood,
-                address.place_name,
-                address.place_number,
-                address.place_complement,
-                address.cep,
-                address.latitude,
-                address.longitude
-            ],
-            professional_experiences: experience_it(JSON.parse(body.professional_experiences), body.email),
-            educational_experiences: experience_it(JSON.parse(body.educational_experiences), body.email)
-        })
+        database.register_candidate([
+            {
+                candidate: [
+                    body.email,
+                    body.name,
+                    get_image_path(body),
+                    body.birthdate,
+                    body.gender.toUpperCase(),
+                    body.phone,
+                    body.tags
+                ],
+                address: [
+                    body.email,
+                    address.state,
+                    address.city,
+                    address.neighborhood,
+                    address.place_name,
+                    address.place_number,
+                    address.place_complement,
+                    address.cep,
+                    address.latitude,
+                    address.longitude
+                ],
+                professional_experiences: experience_it(JSON.parse(body.professional_experiences), body.email),
+                educational_experiences: experience_it(JSON.parse(body.educational_experiences), body.email)
+            }
+        ])
         .then((data) => {
             file_handler.save(get_image_path(body), body.image_data);
 
