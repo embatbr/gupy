@@ -33,12 +33,27 @@ function Database(settings) {
 
     this.register_single_candidate = (values) => {
         return this.db.tx((t) => {
-            return t.batch([
+            let batch = [
                 t.none('INSERT INTO recruitment.candidates VALUES ($1, $2, $3, $4, $5, $6, $7)',
                        values.candidate),
                 t.none('INSERT INTO recruitment.addresses VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
                        values.address)
-            ]);
+            ];
+
+            let experiences = ['professional_experiences', 'educational_experiences'];
+
+            experiences.forEach((experience) => {
+                values[experience].forEach((xp) => {
+                    console.log(xp);
+
+                    batch.push(t.none(
+                        `INSERT INTO recruitment.${experience} VALUES ($1, $2, $3, $4, $5, $6)`,
+                        xp
+                    ));
+                });
+            });
+
+            return t.batch(batch);
         });
     };
 };

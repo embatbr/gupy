@@ -51,25 +51,22 @@ resp = r.post(
         'tags': json.dumps(['python', 'java']),
         'professional_experiences': json.dumps([
             {
-                'company_name': 'Gupy',
-                'job': 'Developer',
+                'institution_name': 'Gupy',
+                'title': 'Developer',
                 'start_date': '2017-09-15',
-                'end_date': None,
                 'description': 'developer stuff too, but with more money'
             },
             {
-                'company_name': 'Revelo',
-                'job': 'Developer',
+                'institution_name': 'Revelo',
+                'title': 'Developer',
                 'start_date': '2015-01-20',
                 'end_date': '2017-08-10',
                 'description': 'developer stuff'
             },
             {
-                'company_name': 'Freelancer',
-                'job': 'Developer',
-                'start_date': '2010-01-01',
-                'end_date': None,
-                'description': 'making some money occasionally'
+                'institution_name': 'Freelancer',
+                'title': 'Developer',
+                'start_date': '2010-01-01'
             }
         ]),
         'educational_experiences': json.dumps([

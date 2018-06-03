@@ -44,32 +44,29 @@ CREATE TABLE recruitment.addresses (
 
 
 CREATE TABLE recruitment.professional_experiences (
-    id SERIAL NOT NULL,
-
-    company_name VARCHAR(255) NOT NULL,
-    job VARCHAR(255) NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE, -- a null value means 'currently employed by the company'
-    description TEXT NOT NULL,
-
     candidate_email VARCHAR(254) NOT NULL,
 
-    PRIMARY KEY (id),
+    institution_name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE, -- a null value means 'not done yet'
+    description TEXT,
+
+    PRIMARY KEY (candidate_email, institution_name, title, start_date),
     FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
 );
 
 
 CREATE TABLE recruitment.educational_experiences (
-    id SERIAL NOT NULL,
-
-    institution_name VARCHAR(255) NOT NULL,
-    title VARCHAR(255), -- a high school may have this field as null
-    start_date DATE NOT NULL,
-    end_date DATE, -- a null value means 'currently employed by the company'
-
     candidate_email VARCHAR(254) NOT NULL,
 
-    PRIMARY KEY (id),
+    institution_name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE, -- a null value means 'not done yet'
+    description TEXT,
+
+    PRIMARY KEY (candidate_email, institution_name, title, start_date),
     FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
 );
 

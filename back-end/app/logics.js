@@ -6,6 +6,25 @@ let get_image_path = (data) => {
     return `resources/images/${email_base64}-${data.image_name}`;
 };
 
+let nulify_undef = (x) => x === undefined ? null : x
+
+let experience_it = (experiences, email) => {
+    let all_values = new Array();
+
+    experiences.forEach((experience) => {
+        all_values.push([
+            email,
+            experience.institution_name,
+            experience.title,
+            experience.start_date,
+            nulify_undef(experience.end_date),
+            nulify_undef(experience.description)
+        ]);
+    });
+
+    return all_values;
+};
+
 
 function CandidateLogic(file_handler, database) {
 
@@ -42,7 +61,9 @@ function CandidateLogic(file_handler, database) {
                 address.cep,
                 address.latitude,
                 address.longitude
-            ]
+            ],
+            professional_experiences: experience_it(JSON.parse(body.professional_experiences), body.email),
+            educational_experiences: experience_it(JSON.parse(body.educational_experiences), body.email)
         })
         .then((data) => {
             file_handler.save(get_image_path(body), body.image_data);
@@ -53,6 +74,8 @@ function CandidateLogic(file_handler, database) {
             });
         })
         .catch((err) => {
+            console.log(err);
+
             response.send({
                 status: 'error',
                 'message': err
