@@ -43,12 +43,10 @@ function Database(settings) {
             let experiences = ['professional_experiences', 'educational_experiences'];
 
             experiences.forEach((experience) => {
-                values[experience].forEach((xp) => {
-                    console.log(xp);
-
+                values[experience].forEach((experience_details) => {
                     batch.push(t.none(
                         `INSERT INTO recruitment.${experience} VALUES ($1, $2, $3, $4, $5, $6)`,
-                        xp
+                        experience_details
                     ));
                 });
             });

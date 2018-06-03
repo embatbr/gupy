@@ -6,6 +6,11 @@ let get_image_path = (data) => {
     return `resources/images/${email_base64}-${data.image_name}`;
 };
 
+let get_file_path = () => {
+    let now = Date.now();
+    return `resources/downloads/${now}-batch.zip`;
+};
+
 let nulify_undef = (x) => x === undefined ? null : x
 
 let experience_it = (experiences, email) => {
@@ -25,19 +30,20 @@ let experience_it = (experiences, email) => {
     return all_values;
 };
 
+let has_payload = (body, response) => {
+    if(body == null || typeof(body) == undefined) {
+        response.send({
+            'err': 'Payload is null or undefined'
+        });
+        return false;
+    }
+
+    return true;
+};
+
 
 function CandidateLogic(file_handler, database) {
-
-    this.create = (request, response, next) => {
-        let body = request.body;
-
-        if(body == null || typeof(body) == undefined) {
-            response.send({
-                'err': 'Payload is null or undefined'
-            });
-            return
-        }
-
+    this.__create = (body, response, next) => {
         let address = JSON.parse(body.address);
 
         database.register_single_candidate({
@@ -69,22 +75,46 @@ function CandidateLogic(file_handler, database) {
             file_handler.save(get_image_path(body), body.image_data);
 
             response.send({
-                status: 'success',
-                message: 'Candidate successfully registered'
+                status: 'success'
             });
         })
         .catch((err) => {
             console.log(err);
 
             response.send({
-                status: 'error',
+                status: 'failure',
                 'message': err
             });
         });
+    };
+
+    this.create = (request, response, next) => {
+        let body = request.body;
+
+        if(!has_payload(body, response)) {
+            return
+        }
+
+        this.__create(body, response, next);
+    }
+
+    this.create_batch = (request, response, next) => {
+        let body = request.body;
+        console.log(body);
+
+        if(!has_payload(body, response)) {
+            return
+        }
+
+        let file_path = get_file_path();
+        file_handler.save(file_path, body.file_data);
+
+        console.log(file_path);
+        response.send({});
     };
 };
 
 
 module.exports = {
-    candidate: CandidateLogic
+    CandidateLogic: CandidateLogic
 };
