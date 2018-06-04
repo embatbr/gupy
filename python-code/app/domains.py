@@ -4,6 +4,8 @@
 
 import psycopg2
 
+import app.util as util
+
 
 class Domain(object):
 
@@ -25,16 +27,33 @@ class CreateDomain(Domain):
                     artifact['birthdate'],
                     artifact['gender'],
                     artifact['email'],
-                    artifact['phone']
+                    artifact['phone'],
+                    artifact['tags']
                 ])
             })
 
-        db_conn = psycopg2.connect(**self.db_conn_params)
-        db_cur = db_conn.cursor()
+        resources = ['candidate']
+        resource_log = None
 
-        for model in batch_models:
-            print(model['candidate'].get_insert_query())
-            model['candidate'].save(db_cur)
+        try:
+            db_conn = psycopg2.connect(**self.db_conn_params)
+            db_cur = db_conn.cursor()
 
-        db_conn.commit()
-        db_conn.close()
+            for model in batch_models:
+                for resource in resources:
+                    resource_log = resource
+                    model[resource].save(db_cur)
+
+            db_conn.commit()
+
+        except util.DatabaseConstraintViolationError as err:
+            if err.constraint == util.DatabaseConstraintViolationError.UNIQUE:
+                reason = "%s '%s' already exists" % (err.field_name, err.field_value)
+                raise util.DomainError('create', resource_log, reason)
+
+        except util.DatabaseInvalidValueError as err:
+            reason = "Invalid value for field '%s'" % err.field_name
+            raise util.DomainError('create', resource_log, reason)
+
+        finally:
+            db_conn.close()

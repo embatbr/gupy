@@ -55,6 +55,7 @@ test('POST should return 400 when body is an empty JSON', resp.status_code, 400)
 name = 'Rick Sanchez %s' % dimension_name()
 photo = photo_name()
 email = email_address(name)
+gender = choose_gender()
 
 resp = r.post(
     'http://{host}:{port}/candidate'.format(**app_conn_settings),
@@ -65,13 +66,61 @@ resp = r.post(
         'name': name,
         'image_name': photo,
         'birthdate': '1948-01-01',
-        'gender': 'Male',
+        'gender': gender,
         'email': email,
-        'phone': '11987654321'
+        'phone': '11987654321',
+        'tags': ['python', 'java']
     })
 )
 
 test('POST should return 200 when body is a non-empty valid JSON', resp.status_code, 200)
+
+
+name = 'Rick Sanchez %s' % dimension_name()
+photo = photo_name()
+gender = choose_gender()
+
+resp = r.post(
+    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    headers={
+        'content-type': 'application/json'
+    },
+    data=json.dumps({
+        'name': name,
+        'image_name': photo,
+        'birthdate': '1948-01-01',
+        'gender': gender,
+        'email': email,
+        'phone': '11987654321',
+        'tags': ['python', 'java']
+    })
+)
+
+test('POST should return 409 when email is repeated', resp.status_code, 409)
+
+
+name = 'Rick Sanchez %s' % dimension_name()
+photo = photo_name()
+email = email_address(name)
+gender = choose_gender()
+
+resp = r.post(
+    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    headers={
+        'content-type': 'application/json'
+    },
+    data=json.dumps({
+        'name': name,
+        'image_name': photo,
+        'birthdate': '1948-01-01',
+        'gender': 'SHEMALE',
+        'email': email,
+        'phone': '11987654321',
+        'tags': ['python', 'java']
+    })
+)
+
+test('POST should return 409 when gender is not allowed', resp.status_code, 409)
 
 
 # resp = r.post(

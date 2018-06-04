@@ -10,13 +10,12 @@ CREATE TABLE recruitment.candidates (
     id SERIAL NOT NULL,
 
     name VARCHAR(255) NOT NULL,
-    -- image_path VARCHAR(255), -- path to image file
-    image_name VARCHAR(255), -- TODO replace by image_path
+    image_path VARCHAR(255), -- path to image file
     birthdate DATE NOT NULL,
     gender recruitment.candidate_gender NOT NULL,
     email VARCHAR(254) NOT NULL,
     phone VARCHAR(11) NOT NULL,
-    -- tags jsonb NOT NULL,
+    tags jsonb NOT NULL,
 
     PRIMARY KEY (id),
     UNIQUE (email)

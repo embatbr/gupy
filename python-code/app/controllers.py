@@ -5,6 +5,8 @@
 import falcon
 import json
 
+import app.util as util
+
 
 embody = lambda req: json.loads(str(req.stream.read(req.content_length), 'utf-8'))
 
@@ -22,7 +24,7 @@ class CandidateController(Controller):
     def on_get(self, req, resp):
         resp.status = falcon.HTTP_200
         resp.body = json.dumps({
-            'msg': 'Should retrieve information about a candidate'
+            'message': 'Should retrieve information about a candidate'
         })
 
     def on_post(self, req, resp):
@@ -35,13 +37,21 @@ class CandidateController(Controller):
         except Exception as err:
             resp.status = falcon.HTTP_400
             resp.body = json.dumps({
-                'msg': str(err)
+                'err': str(err)
             })
             return
 
-        self.domains['create'].apply([body])
+        try:
+            self.domains['create'].apply([body])
+
+        except Exception as err:
+            resp.status = falcon.HTTP_409
+            resp.body = json.dumps({
+                'err': err.show() if isinstance(err, util.DomainError) else str(err)
+            })
+            return
 
         resp.status = falcon.HTTP_200
         resp.body = json.dumps({
-            'msg': 'Should insert information of a candidate'
+            'message': 'Candidate profile successfully created'
         })

@@ -3,7 +3,12 @@
 ## Description
 
 1. [ ] Registry of a single candidate (**Create** action from CRUD):
-    - POST request to endpoint **/candidate**, carrying a JSON payload.
+    - [X] POST request to endpoint **/candidate**, carrying a JSON payload;
+    - [X] Insert into table **candidates**;
+    - [ ] Insert into table **addresses**;
+    - [ ] Insert into table **professional_experiences**;
+    - [ ] Insert into table **educational_experiences**.
+    - [ ] Save image in a file system and reference it in the database.
 2. [ ] Registry of multiple candidates (**Create** action from CRUD):
     - POST request to endpoint **/candidates**, carrying a .zip file;
     - JSON files (one for each entry) inside the .zip files, as well as photo images.

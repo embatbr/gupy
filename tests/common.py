@@ -35,3 +35,11 @@ def photo_name():
 def email_address(name):
     username = '.'.join(name.split(' ')[::-1]).lower()
     return '%s@citadel_of_ricks.com' % username
+
+def choose_gender():
+    number = random.randint(0, 100)
+
+    if number < 50:
+        return 'MALE'
+    if number <= 100:
+        return 'FEMALE'

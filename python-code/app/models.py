@@ -3,12 +3,17 @@
 
 
 import base64
+import json
+import psycopg2
+
+import app.util as util
 
 
 str2base64 = lambda s: base64.b64encode(bytes(s.encode('utf-8'))).decode('utf-8')
 
 
 class Model(object):
+
     def __init__(self, _pg_schema_name, _pg_table_name, fields=dict):
         self._pg_schema_name = _pg_schema_name
         self._pg_table_name = _pg_table_name
@@ -32,14 +37,17 @@ class Model(object):
 
 class CandidateModel(Model):
 
-    def __init__(self, name, image_name, birthdate, gender, email, phone):
+    RESOURCE = 'candidate'
+
+    def __init__(self, name, image_name, birthdate, gender, email, phone, tags):
         super(CandidateModel, self).__init__('recruitment', 'candidates', {
             'name': name,
-            'image_name': '%s_%s' % (str2base64(email), image_name),
+            'image_path': '%s_%s' % (str2base64(email), image_name),
             'birthdate': birthdate,
             'gender': gender.upper(),
             'email': email.lower(),
-            'phone': phone
+            'phone': phone,
+            'tags': tags
         })
 
         self._validate()
@@ -56,4 +64,23 @@ class CandidateModel(Model):
 
     def save(self, db_cur):
         query = self.get_insert_query()
-        db_cur.execute(query, self.fields)
+        values = dict(self.fields)
+        values['tags'] = json.dumps(values['tags'])
+
+        try:
+            db_cur.execute(query, values)
+
+        except psycopg2.IntegrityError as err:
+            msg = 'duplicate key value violates unique constraint "candidates_email_key"'
+            if str(err).startswith(msg):
+                raise util.DatabaseConstraintViolationError(
+                    self._pg_schema_name, self._pg_table_name, 'email', self.fields['email'],
+                    util.DatabaseConstraintViolationError.UNIQUE
+                )
+
+        except Exception as err:
+            msg = 'invalid input value for enum recruitment.candidate_gender'
+            if str(err).startswith(msg):
+                raise util.DatabaseInvalidValueError(
+                    self._pg_schema_name, self._pg_table_name, 'gender'
+                )
