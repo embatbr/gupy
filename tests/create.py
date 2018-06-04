@@ -6,7 +6,7 @@ from common import *
 
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     }
@@ -16,7 +16,7 @@ test('POST should return 400 when body is not present', 400, resp)
 
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -27,7 +27,7 @@ test('POST should return 400 when body is not a JSON', 400, resp)
 
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -44,7 +44,7 @@ gender = choose_gender()
 data=gen_json_data(name, photo, email, gender)
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -60,7 +60,7 @@ gender = choose_gender()
 data=gen_json_data(name, photo, email, gender)
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -76,7 +76,7 @@ email = email_address(name)
 data=gen_json_data(name, photo, email, 'SHEMALE')
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -104,7 +104,7 @@ data['address'] = {
 }
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -122,7 +122,7 @@ data=gen_json_data(name, photo, email, gender)
 data['birthdate'] = '1948-13-01'
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -140,7 +140,7 @@ data=gen_json_data(name, photo, email, gender)
 data['phone'] = None
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -158,7 +158,7 @@ data=gen_json_data(name, photo, email, gender)
 data['address']['state'] = None
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -176,7 +176,7 @@ data=gen_json_data(name, photo, email, gender)
 data['phone'] = '119876543210'
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -194,7 +194,7 @@ data=gen_json_data(name, photo, email, gender)
 data['address']['cep'] = '01310-1001'
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -212,7 +212,7 @@ data=gen_json_data(name, photo, email, gender)
 data['address']['latitude'] = -123.5647577
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -230,7 +230,7 @@ data=gen_json_data(name, photo, email, gender)
 data['educational_experiences'][0]['institution_name'] = None
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -248,7 +248,7 @@ data=gen_json_data(name, photo, email, gender)
 data['educational_experiences'][0]['start_date'] = '1960-13-01'
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },

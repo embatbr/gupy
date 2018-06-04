@@ -6,7 +6,7 @@ from common import *
 
 
 resp = r.post(
-    'http://{host}:{port}/candidates'.format(**app_conn_settings),
+    'http://{host}:{port}/profiles'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     }
@@ -16,7 +16,7 @@ test('POST should return 400 when body is not present', 400, resp)
 
 
 resp = r.post(
-    'http://{host}:{port}/candidates'.format(**app_conn_settings),
+    'http://{host}:{port}/profiles'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -27,7 +27,7 @@ test('POST should return 400 when body is not a JSON', 400, resp)
 
 
 resp = r.post(
-    'http://{host}:{port}/candidates'.format(**app_conn_settings),
+    'http://{host}:{port}/profiles'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -44,7 +44,7 @@ names = [
 ]
 
 resp = r.post(
-    'http://{host}:{port}/candidates'.format(**app_conn_settings),
+    'http://{host}:{port}/profiles'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },

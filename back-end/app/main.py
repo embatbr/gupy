@@ -30,11 +30,11 @@ model_inits = {
 }
 
 routes = {
-    'candidate': controllers.CandidateController({
+    'profile': controllers.ProfileController({
         'create': domains.DomainCreate(settings.DB_CONNECTION, model_inits),
         'read': domains.DomainRead(settings.DB_CONNECTION, model_inits)
     }),
-    'candidates': controllers.CandidateBatchController({
+    'profiles': controllers.ProfileBatchController({
         'create': domains.DomainCreate(settings.DB_CONNECTION, model_inits)
     })
 }

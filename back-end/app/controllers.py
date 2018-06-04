@@ -19,7 +19,7 @@ class Controller(object):
         self.domains = domains
 
 
-class CandidateController(Controller):
+class ProfileController(Controller):
 
     def on_get(self, req, resp):
         params = req.params
@@ -69,7 +69,7 @@ class CandidateController(Controller):
             })
 
 
-class CandidateBatchController(Controller):
+class ProfileBatchController(Controller):
 
     def on_post(self, req, resp):
         body = None

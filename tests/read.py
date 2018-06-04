@@ -12,7 +12,7 @@ gender = choose_gender()
 data=gen_json_data(name, photo, email, gender)
 
 resp = r.post(
-    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    'http://{host}:{port}/profile'.format(**app_conn_settings),
     headers={
         'content-type': 'application/json'
     },
@@ -21,7 +21,7 @@ resp = r.post(
 
 if resp.status_code == 200:
     resp = r.get(
-        'http://{host}:{port}/candidate'.format(**app_conn_settings),
+        'http://{host}:{port}/profile'.format(**app_conn_settings),
         params={
             'email': email
         }
