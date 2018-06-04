@@ -4,7 +4,31 @@ BEGIN;
 CREATE SCHEMA recruitment;
 
 
-CREATE TYPE recruitment.candidate_gender AS ENUM ('MALE', 'FEMALE');
+CREATE TYPE recruitment.brazilian_states AS ENUM ('AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES',
+                                                  'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR',
+                                                  'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC',
+                                                  'SP', 'SE', 'TO');
+
+CREATE TABLE recruitment.addresses (
+    id SERIAL NOT NULL,
+
+    state recruitment.brazilian_states NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    neighborhood VARCHAR(255) NOT NULL,
+    place_name VARCHAR(255) NOT NULL, -- euivalent to "logradouro"
+    place_number VARCHAR(10) NOT NULL, -- may be "S/N" or similar
+    place_complement VARCHAR(255) NOT NULL,
+
+    cep CHAR(9) NOT NULL, -- format: ABCDE-FGH
+
+    latitude NUMERIC(8,6) NOT NULL, -- 6 decimal places gives a precision of 4 inches
+    longitude NUMERIC(9,6) NOT NULL, -- 6 decimal places gives a precision of 4 inches
+
+    PRIMARY KEY (id)
+);
+
+
+CREATE TYPE recruitment.candidate_genders AS ENUM ('MALE', 'FEMALE');
 
 CREATE TABLE recruitment.candidates (
     id SERIAL NOT NULL,
@@ -12,41 +36,21 @@ CREATE TABLE recruitment.candidates (
     name VARCHAR(255) NOT NULL,
     image_path VARCHAR(255), -- path to image file
     birthdate DATE NOT NULL,
-    gender recruitment.candidate_gender NOT NULL,
+    gender recruitment.candidate_genders NOT NULL,
     email VARCHAR(254) NOT NULL,
     phone VARCHAR(11) NOT NULL,
     tags jsonb NOT NULL,
 
+    address_id INTEGER NOT NULL,
+
     PRIMARY KEY (id),
-    UNIQUE (email)
+    UNIQUE (email),
+    FOREIGN KEY (address_id) REFERENCES recruitment.addresses (id)
 );
 
 
--- CREATE TYPE recruitment.brazilian_state AS ENUM ('AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
---                                      'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
---                                      'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO');
-
--- CREATE TABLE recruitment.addresses (
---     candidate_email VARCHAR(254) NOT NULL, -- unusual, but easier to deal with
-
---     state recruitment.brazilian_state NOT NULL,
---     city VARCHAR(255) NOT NULL,
---     neighborhood VARCHAR(255) NOT NULL,
---     place_name VARCHAR(255) NOT NULL, -- euivalent to "logradouro"
---     place_number INTEGER NOT NULL,
---     place_complement VARCHAR(255) NOT NULL,
-
---     cep CHAR(9) NOT NULL, -- format: ABCDE-FGH
-
---     latitude NUMERIC(8,6) NOT NULL, -- 6 decimal places gives a precision of 4 inches
---     longitude NUMERIC(9,6) NOT NULL, -- 6 decimal places gives a precision of 4 inches
-
---     PRIMARY KEY (candidate_email)
--- );
-
-
 -- CREATE TABLE recruitment.professional_experiences (
---     candidate_email VARCHAR(254) NOT NULL,
+--     id SERIAL NOT NULL,
 
 --     institution_name VARCHAR(255) NOT NULL,
 --     title VARCHAR(255) NOT NULL,
@@ -54,13 +58,15 @@ CREATE TABLE recruitment.candidates (
 --     end_date DATE, -- a null value means 'not done yet'
 --     description TEXT,
 
---     PRIMARY KEY (candidate_email, institution_name, title, start_date),
+--     candidate_email VARCHAR(254) NOT NULL,
+
+--     PRIMARY KEY (id),
 --     FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
 -- );
 
 
 -- CREATE TABLE recruitment.educational_experiences (
---     candidate_email VARCHAR(254) NOT NULL,
+--     id SERIAL NOT NULL,
 
 --     institution_name VARCHAR(255) NOT NULL,
 --     title VARCHAR(255) NOT NULL,
@@ -68,7 +74,9 @@ CREATE TABLE recruitment.candidates (
 --     end_date DATE, -- a null value means 'not done yet'
 --     description TEXT,
 
---     PRIMARY KEY (candidate_email, institution_name, title, start_date),
+--     candidate_email VARCHAR(254) NOT NULL,
+
+--     PRIMARY KEY (id),
 --     FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
 -- );
 

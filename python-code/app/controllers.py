@@ -45,9 +45,11 @@ class CandidateController(Controller):
             self.domains['create'].apply([body])
 
         except Exception as err:
-            resp.status = falcon.HTTP_409
+            is_domain_err = isinstance(err, util.DomainError)
+
+            resp.status = falcon.HTTP_403 if is_domain_err else falcon.HTTP_400
             resp.body = json.dumps({
-                'err': err.show() if isinstance(err, util.DomainError) else str(err)
+                'err': err.show() if is_domain_err else str(err)
             })
             return
 

@@ -25,8 +25,9 @@ application = falcon.API()
 
 routes = {
     'candidate': controllers.CandidateController({
-        'create': domains.CreateDomain(settings.DB_CONNECTION, {
-            'candidate': models.CandidateModel
+        'create': domains.DomainCreate(settings.DB_CONNECTION, {
+            'candidate': models.CandidateModel,
+            'address': models.AddressModel
         })
     })
 }

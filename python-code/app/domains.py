@@ -14,13 +14,24 @@ class Domain(object):
         self.models = models
 
 
-class CreateDomain(Domain):
+class DomainCreate(Domain):
 
     def apply(self, artifacts):
         batch_models = list()
 
         for artifact in artifacts:
             batch_models.append({
+                'address': self.models['address'](*[
+                    artifact['address']['state'],
+                    artifact['address']['city'],
+                    artifact['address']['neighborhood'],
+                    artifact['address']['place_name'],
+                    artifact['address']['place_number'],
+                    artifact['address']['place_complement'],
+                    artifact['address']['cep'],
+                    artifact['address']['latitude'],
+                    artifact['address']['longitude']
+                ]),
                 'candidate': self.models['candidate'](*[
                     artifact['name'],
                     artifact['image_name'],
@@ -32,28 +43,30 @@ class CreateDomain(Domain):
                 ])
             })
 
-        resources = ['candidate']
-        resource_log = None
-
         try:
             db_conn = psycopg2.connect(**self.db_conn_params)
             db_cur = db_conn.cursor()
 
             for model in batch_models:
-                for resource in resources:
-                    resource_log = resource
-                    model[resource].save(db_cur)
+                address_id = model['address'].save(db_cur)
+                model['candidate'].save(db_cur, address_id)
 
             db_conn.commit()
 
         except util.DatabaseConstraintViolationError as err:
             if err.constraint == util.DatabaseConstraintViolationError.UNIQUE:
                 reason = "%s '%s' already exists" % (err.field_name, err.field_value)
-                raise util.DomainError('create', resource_log, reason)
+                raise util.DomainError('create', err.resource, reason)
+
+            if err.constraint == util.DatabaseConstraintViolationError.NOT_NULL:
+                reason = "Null value for non-nullable field"
+                raise util.DomainError('create', err.resource, reason)
 
         except util.DatabaseInvalidValueError as err:
-            reason = "Invalid value for field '%s'" % err.field_name
-            raise util.DomainError('create', resource_log, reason)
+            reason = "Value invalid or too long for field"
+            if err.field_name:
+                reason = "%s '%s'" % (reason, err.field_name)
+            raise util.DomainError('create', err.resource, reason)
 
         finally:
             db_conn.close()

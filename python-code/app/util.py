@@ -4,9 +4,8 @@
 
 class DatabaseConstraintViolationError(Exception):
 
-    def __init__(self, schema, table, field_name, field_value, constraint):
-        self.schema = schema
-        self.table = table
+    def __init__(self, resource, field_name, field_value, constraint):
+        self.resource = resource
         self.field_name = field_name
         self.field_value = field_value
         self.constraint = constraint
@@ -32,9 +31,8 @@ class DatabaseConstraintViolationError(Exception):
 
 class DatabaseInvalidValueError(Exception):
 
-    def __init__(self, schema, table, field_name):
-        self.schema = schema
-        self.table = table
+    def __init__(self, resource, field_name):
+        self.resource = resource
         self.field_name = field_name
 
 
