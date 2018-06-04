@@ -1,4 +1,4 @@
-"""Tests for the Create part of CRUD.
+"""Tests for the Create (in batch) part of CRUD.
 """
 
 

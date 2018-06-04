@@ -94,3 +94,11 @@ class DomainCreate(Domain):
 
         finally:
             db_conn.close()
+
+
+class DomainRead(Domain):
+
+    def apply(self, params):
+        return {
+            'message': "Sorry, I'm very tired. Gonna sleep."
+        }

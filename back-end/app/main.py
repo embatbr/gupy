@@ -23,20 +23,19 @@ class RESTfulApplication(object):
 
 application = falcon.API()
 
+model_inits = {
+    'candidate': models.CandidateModel,
+    'address': models.AddressModel,
+    'experience': models.ExperienceModel
+}
+
 routes = {
     'candidate': controllers.CandidateController({
-        'create': domains.DomainCreate(settings.DB_CONNECTION, {
-            'candidate': models.CandidateModel,
-            'address': models.AddressModel,
-            'experience': models.ExperienceModel
-        })
+        'create': domains.DomainCreate(settings.DB_CONNECTION, model_inits),
+        'read': domains.DomainRead(settings.DB_CONNECTION, model_inits)
     }),
     'candidates': controllers.CandidateBatchController({
-        'create': domains.DomainCreate(settings.DB_CONNECTION, {
-            'candidate': models.CandidateModel,
-            'address': models.AddressModel,
-            'experience': models.ExperienceModel
-        })
+        'create': domains.DomainCreate(settings.DB_CONNECTION, model_inits)
     })
 }
 

@@ -12,7 +12,10 @@
     - [X] POST request to endpoint **/candidates**, carrying a list of JSONs;
     - [ ] Update payload from previous item to a .zip file;
     - [ ] JSON files (one for each entry) inside the .zip files, as well as photo images.
-3. [ ] **Read**, **Update** and **Delete** actions from CRUD;
+3. [ ] **Read**, **Update** and **Delete** actions from CRUD:
+    - [ ] **Read**
+    - [ ] **Update**
+    - [ ] **Delete**
 4. [ ] Front-end;
 5. [ ] Internationalization;
 6. [ ] Map visualization;
