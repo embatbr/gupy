@@ -80,7 +80,32 @@ resp = r.post(
             'cep': '01310-100',
             'latitude': -23.5647577,
             'longitude': -46.6518495
-        }
+        },
+        'professional_experiences': [
+            {
+                'institution_name': 'Laboratório do Multiverso',
+                'title': 'Cientista Maluco',
+                'start_date': '1990-06-01',
+                'end_date': None,
+                'description': 'Lot of stuff'
+            },
+            {
+                'institution_name': 'My Garage',
+                'title': 'Cientista "normal"',
+                'start_date': '1970-01-01',
+                'end_date': '1990-05-31',
+                'description': 'Normal nerdy stuff'
+            }
+        ],
+        'educational_experiences': [
+            {
+                'institution_name': 'Escola da Vida',
+                'title': 'Vagabundo',
+                'start_date': '1960-01-01',
+                'end_date': None,
+                'description': 'Escola é chato'
+            }
+        ]
     })
 )
 
@@ -400,64 +425,121 @@ resp = r.post(
 test('POST should return 403 when coordinate precision overflows', 403, resp.status_code)
 
 
-# resp = r.post(
-#     'http://{host}:{port}/candidate'.format(**app_conn_settings),
-#     headers={
-#         'content-type': 'application/json'
-#     },
-#     data={
-#         'name': '%s %s' % (first_name, last_name),
-#         'image_name': 'rick.png',
-#         'image_data': base64.b64encode(open('./rick.png', 'rb').read()),
-#         'birthdate': '1948-01-01',
-#         'gender': 'Male',
-#         'email': '%s.%s@email.com' % (first_name.lower(), last_name.lower()),
-#         'phone': '11987654321',
-#         'tags': ['python', 'java'],
-#         'address': {
-#             'state': 'SP',
-#             'city': 'São Paulo',
-#             'neighborhood': 'Bela Vista',
-#             'place_name': 'Av. Paulista',
-#             'place_number': '1000',
-#             'place_complement': 'apartmento 10',
-#             'cep': '01310-100',
-#             'latitude': -23.5647577,
-#             'longitude': -46.6518495
-#         },
-#         'professional_experiences': [
-#             {
-#                 'institution_name': 'Gupy',
-#                 'title': 'Developer',
-#                 'start_date': '2017-09-15',
-#                 'description': 'developer stuff too, but with more money'
-#             },
-#             {
-#                 'institution_name': 'Revelo',
-#                 'title': 'Developer',
-#                 'start_date': '2015-01-20',
-#                 'end_date': '2017-08-10',
-#                 'description': 'developer stuff'
-#             },
-#             {
-#                 'institution_name': 'Freelancer',
-#                 'title': 'Developer',
-#                 'start_date': '2010-01-01'
-#             }
-#         ],
-#         'educational_experiences': [
-#             {
-#                 'institution_name': 'Random MBA College',
-#                 'title': 'MBA',
-#                 'start_date': '2018-02-01',
-#                 'end_date': None
-#             },
-#             {
-#                 'institution_name': 'not MIT',
-#                 'title': 'Computer Science',
-#                 'start_date': '2010-02-01',
-#                 'end_date': '2015-05-20'
-#             }
-#         ]
-#     }
-# )
+name = 'Rick Sanchez %s' % dimension_name()
+photo = photo_name()
+email = email_address(name)
+gender = choose_gender()
+
+resp = r.post(
+    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    headers={
+        'content-type': 'application/json'
+    },
+    data=json.dumps({
+        'name': name,
+        'image_name': photo,
+        'birthdate': '1948-01-01',
+        'gender': gender,
+        'email': email,
+        'phone': '11987654321',
+        'tags': ['python', 'java'],
+        'address': {
+            'state': 'SP',
+            'city': 'São Paulo',
+            'neighborhood': 'Jardins',
+            'place_name': 'R. Pamplona',
+            'place_number': '1000',
+            'place_complement': 'apartmento 10',
+            'cep': '01310-100',
+            'latitude': -23.5647577,
+            'longitude': -46.6518495
+        },
+        'professional_experiences': [
+            {
+                'institution_name': 'Laboratório do Multiverso',
+                'title': 'Cientista Maluco',
+                'start_date': '1990-06-01',
+                'end_date': None,
+                'description': 'Lot of stuff'
+            },
+            {
+                'institution_name': 'My Garage',
+                'title': 'Cientista "normal"',
+                'start_date': '1970-01-01',
+                'end_date': '1990-05-31',
+                'description': 'Normal nerdy stuff'
+            }
+        ],
+        'educational_experiences': [
+            {
+                'institution_name': None,
+                'title': 'Vagabundo',
+                'start_date': '1960-01-01',
+                'end_date': None,
+                'description': 'Escola é chato'
+            }
+        ]
+    })
+)
+
+test('POST should return 403 when institution_name is null', 403, resp.status_code)
+
+
+name = 'Rick Sanchez %s' % dimension_name()
+photo = photo_name()
+email = email_address(name)
+gender = choose_gender()
+
+resp = r.post(
+    'http://{host}:{port}/candidate'.format(**app_conn_settings),
+    headers={
+        'content-type': 'application/json'
+    },
+    data=json.dumps({
+        'name': name,
+        'image_name': photo,
+        'birthdate': '1948-01-01',
+        'gender': gender,
+        'email': email,
+        'phone': '11987654321',
+        'tags': ['python', 'java'],
+        'address': {
+            'state': 'SP',
+            'city': 'São Paulo',
+            'neighborhood': 'Jardins',
+            'place_name': 'R. Pamplona',
+            'place_number': '1000',
+            'place_complement': 'apartmento 10',
+            'cep': '01310-100',
+            'latitude': -23.5647577,
+            'longitude': -46.6518495
+        },
+        'professional_experiences': [
+            {
+                'institution_name': 'Laboratório do Multiverso',
+                'title': 'Cientista Maluco',
+                'start_date': '1990-06-01',
+                'end_date': None,
+                'description': 'Lot of stuff'
+            },
+            {
+                'institution_name': 'My Garage',
+                'title': 'Cientista "normal"',
+                'start_date': '1970-01-01',
+                'end_date': '1990-05-31',
+                'description': 'Normal nerdy stuff'
+            }
+        ],
+        'educational_experiences': [
+            {
+                'institution_name': 'Escola da Vida',
+                'title': 'Vagabundo',
+                'start_date': '1960-13-01',
+                'end_date': None,
+                'description': 'Escola é chato'
+            }
+        ]
+    })
+)
+
+test('POST should return 403 when date is incorrect', 403, resp.status_code)

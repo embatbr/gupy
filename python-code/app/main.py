@@ -27,7 +27,8 @@ routes = {
     'candidate': controllers.CandidateController({
         'create': domains.DomainCreate(settings.DB_CONNECTION, {
             'candidate': models.CandidateModel,
-            'address': models.AddressModel
+            'address': models.AddressModel,
+            'experience': models.ExperienceModel
         })
     })
 }

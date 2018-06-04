@@ -28,7 +28,7 @@ CREATE TABLE recruitment.addresses (
 );
 
 
-CREATE TYPE recruitment.candidate_genders AS ENUM ('MALE', 'FEMALE');
+CREATE TYPE recruitment.genders AS ENUM ('FEMALE', 'MALE');
 
 CREATE TABLE recruitment.candidates (
     id SERIAL NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE recruitment.candidates (
     name VARCHAR(255) NOT NULL,
     image_path VARCHAR(255), -- path to image file
     birthdate DATE NOT NULL,
-    gender recruitment.candidate_genders NOT NULL,
+    gender recruitment.genders NOT NULL,
     email VARCHAR(254) NOT NULL,
     phone VARCHAR(11) NOT NULL,
     tags jsonb NOT NULL,
@@ -49,36 +49,23 @@ CREATE TABLE recruitment.candidates (
 );
 
 
--- CREATE TABLE recruitment.professional_experiences (
---     id SERIAL NOT NULL,
+CREATE TYPE recruitment.experience_types AS ENUM ('EDUCATIONAL', 'PROFESSIONAL');
 
---     institution_name VARCHAR(255) NOT NULL,
---     title VARCHAR(255) NOT NULL,
---     start_date DATE NOT NULL,
---     end_date DATE, -- a null value means 'not done yet'
---     description TEXT,
+CREATE TABLE recruitment.experiences (
+    id SERIAL NOT NULL,
 
---     candidate_email VARCHAR(254) NOT NULL,
+    _type recruitment.experience_types NOT NULL,
+    institution_name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE, -- a null value means 'not done yet'
+    description TEXT,
 
---     PRIMARY KEY (id),
---     FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
--- );
+    candidate_id INTEGER NOT NULL,
 
-
--- CREATE TABLE recruitment.educational_experiences (
---     id SERIAL NOT NULL,
-
---     institution_name VARCHAR(255) NOT NULL,
---     title VARCHAR(255) NOT NULL,
---     start_date DATE NOT NULL,
---     end_date DATE, -- a null value means 'not done yet'
---     description TEXT,
-
---     candidate_email VARCHAR(254) NOT NULL,
-
---     PRIMARY KEY (id),
---     FOREIGN KEY (candidate_email) REFERENCES recruitment.candidates (email)
--- );
+    PRIMARY KEY (id),
+    FOREIGN KEY (candidate_id) REFERENCES recruitment.candidates (id)
+);
 
 
 COMMIT;

@@ -20,7 +20,7 @@ class DomainCreate(Domain):
         batch_models = list()
 
         for artifact in artifacts:
-            batch_models.append({
+            models_row = {
                 'address': self.models['address'](*[
                     artifact['address']['state'],
                     artifact['address']['city'],
@@ -41,15 +41,37 @@ class DomainCreate(Domain):
                     artifact['phone'],
                     artifact['tags']
                 ])
-            })
+            }
+
+            models_row['experiences'] = list()
+
+            for _type in ['professional', 'educational']:
+                key = '%s_experiences' % _type
+
+                if key in artifact and artifact[key]:
+                    experiences = artifact[key]
+
+                    for experience in experiences:
+                        models_row['experiences'].append(self.models['experience'](*[
+                            _type,
+                            experience['institution_name'],
+                            experience['title'],
+                            experience['start_date'],
+                            experience['end_date'],
+                            experience['description']
+                        ]))
+
+            batch_models.append(models_row)
 
         try:
             db_conn = psycopg2.connect(**self.db_conn_params)
             db_cur = db_conn.cursor()
 
-            for model in batch_models:
-                address_id = model['address'].save(db_cur)
-                model['candidate'].save(db_cur, address_id)
+            for models_row in batch_models:
+                address_id = models_row['address'].save(db_cur)
+                candidate_id = models_row['candidate'].save(db_cur, address_id)
+                for model in models_row['experiences']:
+                    model.save(db_cur, candidate_id)
 
             db_conn.commit()
 
@@ -61,6 +83,8 @@ class DomainCreate(Domain):
             if err.constraint == util.DatabaseConstraintViolationError.NOT_NULL:
                 reason = "Null value for non-nullable field"
                 raise util.DomainError('create', err.resource, reason)
+
+            raise err
 
         except util.DatabaseInvalidValueError as err:
             reason = "Value invalid or too long for field"
