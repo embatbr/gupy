@@ -43,3 +43,51 @@ def choose_gender():
         return 'MALE'
     if number <= 100:
         return 'FEMALE'
+
+
+def gen_json_data(name, photo, email, gender):
+    return {
+        'name': name,
+        'image_name': photo,
+        'birthdate': '1948-01-01',
+        'gender': gender,
+        'email': email,
+        'phone': '11987654321',
+        'tags': ['python', 'java'],
+        'address': {
+            'state': 'SP',
+            'city': 'São Paulo',
+            'neighborhood': 'Jardins',
+            'place_name': 'R. Pamplona',
+            'place_number': '1000',
+            'place_complement': 'apartmento 10',
+            'cep': '01310-100',
+            'latitude': -23.5647577,
+            'longitude': -46.6518495
+        },
+        'professional_experiences': [
+            {
+                'institution_name': 'Laboratório do Multiverso',
+                'title': 'Cientista Maluco',
+                'start_date': '1990-06-01',
+                'end_date': None,
+                'description': 'Lot of stuff'
+            },
+            {
+                'institution_name': 'My Garage',
+                'title': 'Cientista "normal"',
+                'start_date': '1970-01-01',
+                'end_date': '1990-05-31',
+                'description': 'Normal nerdy stuff'
+            }
+        ],
+        'educational_experiences': [
+            {
+                'institution_name': 'Escola da Vida',
+                'title': 'Vagabundo',
+                'start_date': '1960-01-01',
+                'end_date': None,
+                'description': 'Escola é chato'
+            }
+        ]
+    }
