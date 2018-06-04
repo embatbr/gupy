@@ -9,9 +9,9 @@ import app.util as util
 
 class Domain(object):
 
-    def __init__(self, db_conn_params, models):
+    def __init__(self, db_conn_params, model_inits):
         self.db_conn_params = db_conn_params
-        self.models = models
+        self.model_inits = model_inits
 
 
 class DomainCreate(Domain):
@@ -21,7 +21,7 @@ class DomainCreate(Domain):
 
         for artifact in artifacts:
             models_row = {
-                'address': self.models['address'](*[
+                'address': self.model_inits['address'](*[
                     artifact['address']['state'],
                     artifact['address']['city'],
                     artifact['address']['neighborhood'],
@@ -32,7 +32,7 @@ class DomainCreate(Domain):
                     artifact['address']['latitude'],
                     artifact['address']['longitude']
                 ]),
-                'candidate': self.models['candidate'](*[
+                'candidate': self.model_inits['candidate'](*[
                     artifact['name'],
                     artifact['image_name'],
                     artifact['birthdate'],
@@ -52,7 +52,7 @@ class DomainCreate(Domain):
                     experiences = artifact[key]
 
                     for experience in experiences:
-                        models_row['experiences'].append(self.models['experience'](*[
+                        models_row['experiences'].append(self.model_inits['experience'](*[
                             _type,
                             experience['institution_name'],
                             experience['title'],

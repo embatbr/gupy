@@ -5,24 +5,6 @@
 from common import *
 
 
-str2base64 = lambda s: base64.b64encode(bytes(s.encode('utf-8'))).decode('utf-8')
-
-
-def test(name, expected, given):
-    try:
-        print("'{}'".format(name))
-        print('expected:', expected)
-        print('given:', given)
-        print('result:', end=' ')
-        assert given == expected
-        print('SUCCESS')
-    except AssertionError as err:
-        print('FAILURE')
-    finally:
-        print(resp.text)
-        print()
-
-
 resp = r.post(
     'http://{host}:{port}/candidate'.format(**app_conn_settings),
     headers={
@@ -30,7 +12,7 @@ resp = r.post(
     }
 )
 
-test('POST should return 400 when body is not present', 400, resp.status_code)
+test('POST should return 400 when body is not present', 400, resp)
 
 
 resp = r.post(
@@ -41,7 +23,7 @@ resp = r.post(
     data='not a JSON'
 )
 
-test('POST should return 400 when body is not a JSON', 400, resp.status_code)
+test('POST should return 400 when body is not a JSON', 400, resp)
 
 
 resp = r.post(
@@ -52,7 +34,7 @@ resp = r.post(
     data={}
 )
 
-test('POST should return 400 when body is an empty JSON', 400, resp.status_code)
+test('POST should return 400 when body is an empty JSON', 400, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -69,7 +51,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 200 when body is a non-empty valid JSON', 200, resp.status_code)
+test('POST should return 200 when body is a non-empty valid JSON', 200, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -85,7 +67,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when email is repeated', 403, resp.status_code)
+test('POST should return 403 when email is repeated', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -101,7 +83,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when gender is not allowed', 403, resp.status_code)
+test('POST should return 403 when gender is not allowed', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -129,7 +111,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when state is not allowed', 403, resp.status_code)
+test('POST should return 403 when state is not allowed', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -147,7 +129,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when birthdate is incorrect', 403, resp.status_code)
+test('POST should return 403 when birthdate is incorrect', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -165,7 +147,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when phone null', 403, resp.status_code)
+test('POST should return 403 when phone null', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -183,7 +165,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when state null', 403, resp.status_code)
+test('POST should return 403 when state null', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -201,7 +183,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 phone value overflows', 403, resp.status_code)
+test('POST should return 403 phone value overflows', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -219,7 +201,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 cep value overflows', 403, resp.status_code)
+test('POST should return 403 cep value overflows', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -237,7 +219,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when coordinate precision overflows', 403, resp.status_code)
+test('POST should return 403 when coordinate precision overflows', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -255,7 +237,7 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when institution_name is null', 403, resp.status_code)
+test('POST should return 403 when institution_name is null', 403, resp)
 
 
 name = 'Rick Sanchez %s' % dimension_name()
@@ -273,4 +255,4 @@ resp = r.post(
     data=json.dumps(data)
 )
 
-test('POST should return 403 when date (in experience) is incorrect', 403, resp.status_code)
+test('POST should return 403 when date (in experience) is incorrect', 403, resp)

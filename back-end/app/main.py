@@ -30,6 +30,13 @@ routes = {
             'address': models.AddressModel,
             'experience': models.ExperienceModel
         })
+    }),
+    'candidates': controllers.CandidateBatchController({
+        'create': domains.DomainCreate(settings.DB_CONNECTION, {
+            'candidate': models.CandidateModel,
+            'address': models.AddressModel,
+            'experience': models.ExperienceModel
+        })
     })
 }
 

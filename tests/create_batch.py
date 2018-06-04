@@ -1,21 +1,58 @@
+"""Tests for the Create part of CRUD.
+"""
+
+
 from common import *
-
-
-name = uuid.uuid4().hex
-(mickey_first_name, mickey_last_name) = (name[ : random.randint(3, 5)],
-                           name[random.randint(5, 10) : random.randint(15, 20)])
-
-name = uuid.uuid4().hex
-(donald_first_name, donald_last_name) = (name[ : random.randint(3, 5)],
-                           name[random.randint(5, 10) : random.randint(15, 20)])
 
 
 resp = r.post(
     'http://{host}:{port}/candidates'.format(**app_conn_settings),
-    data={
-        'file_data': base64.b64encode(open('./batch.zip', 'rb').read())
+    headers={
+        'content-type': 'application/json'
     }
 )
 
-print(resp)
-print(resp.json())
+test('POST should return 400 when body is not present', 400, resp)
+
+
+resp = r.post(
+    'http://{host}:{port}/candidates'.format(**app_conn_settings),
+    headers={
+        'content-type': 'application/json'
+    },
+    data='not a JSON'
+)
+
+test('POST should return 400 when body is not a JSON', 400, resp)
+
+
+resp = r.post(
+    'http://{host}:{port}/candidates'.format(**app_conn_settings),
+    headers={
+        'content-type': 'application/json'
+    },
+    data={}
+)
+
+test('POST should return 400 when body is an empty JSON', 400, resp)
+
+
+names = [
+    'Rick Sanchez %s' % dimension_name(),
+    'Rick Sanchez %s' % dimension_name(),
+    'Rick Sanchez %s' % dimension_name()
+]
+
+resp = r.post(
+    'http://{host}:{port}/candidates'.format(**app_conn_settings),
+    headers={
+        'content-type': 'application/json'
+    },
+    data=json.dumps([
+        gen_json_data(names[0], photo_name(), email_address(names[0]), choose_gender()),
+        gen_json_data(names[1], photo_name(), email_address(names[1]), choose_gender()),
+        gen_json_data(names[2], photo_name(), email_address(names[2]), choose_gender())
+    ])
+)
+
+test('POST should return 200 when body is a non-empty valid JSON', 200, resp)
