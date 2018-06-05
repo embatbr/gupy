@@ -4,7 +4,7 @@
 
 import unittest
 
-from common import *
+from util import *
 
 
 BASE_URL = 'http://{host}:{port}'.format(**app_conn_settings)
