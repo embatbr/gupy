@@ -8,11 +8,14 @@ import json
 import app.util as util
 
 
-def _extract_body(body_type, req, resp):
-    stream = req.stream.read(req.content_length)
-    body = json.loads(str(stream, 'utf-8'))
-    assert isinstance(body, body_type) and body, 'Payload must be a non-empty JSON object'
-    return body
+def _extract_payload(payload_type, req, resp):
+    try:
+        stream = req.stream.read(req.content_length)
+        payload = json.loads(str(stream, 'utf-8'))
+        assert isinstance(payload, payload_type) and payload
+        return payload
+    except Exception as error:
+        raise Exception('Payload must be a non-empty JSON object')
 
 
 class Controller(object):
@@ -20,14 +23,16 @@ class Controller(object):
     def __init__(self, domains):
         self.domains = domains
 
+    # TODO create a "_exec_request" method to encapsulate all "on_" methods
+
     def on_post(self, req, resp, is_batch):
         try:
-            body = _extract_body(list if is_batch else dict, req, resp)
+            payload = _extract_payload(list if is_batch else dict, req, resp)
 
-            self.domains['create'].apply(body if is_batch else [body])
+            self.domains['create'].apply(payload if is_batch else [payload])
 
-            resp.status = falcon.HTTP_200
             plural = 's' if is_batch else ''
+            resp.status = falcon.HTTP_200
             resp.body = json.dumps({
                 'message': 'Candidate{0} profile{0} successfully created'.format(plural)
             })
@@ -47,9 +52,9 @@ class ProfileController(Controller):
         super(ProfileController, self).on_post(req, resp, False)
 
     def on_get(self, req, resp):
-        params = req.params
-
         try:
+            params = req.params
+
             profile = self.domains['read'].apply(params)
 
             resp.status = falcon.HTTP_200

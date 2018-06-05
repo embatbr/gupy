@@ -69,37 +69,23 @@ class AddressModel(Model):
             _id = db_cur.fetchone()[0]
             return _id
 
-        except psycopg2.IntegrityError as err:
-            msg = 'null value in column'
-            if str(err).startswith(msg):
-                raise util.DatabaseConstraintViolationError(
-                    self._resource, None, None,
-                    util.DatabaseConstraintViolationError.NOT_NULL
-                )
+        except psycopg2.IntegrityError as error:
+            util.handle_not_null_violation(error, self._resource)
+            raise error
 
-            raise err
-
-        except Exception as err:
-            msg = 'invalid input value for enum recruitment.brazilian_states'
-            if str(err).startswith(msg):
-                raise util.DatabaseInvalidValueError(self._resource, 'state')
-
-            msg = 'value too long for type character'
-            if str(err).startswith(msg):
-                raise util.DatabaseInvalidValueError(self._resource, None)
-
-            msg = 'numeric field overflow'
-            if str(err).startswith(msg):
-                raise util.DatabaseInvalidValueError(self._resource, None)
-
-            raise err
+        except Exception as error:
+            util.handle_enum_violation('recruitment.brazilian_states', 'state',
+                error, self._resource)
+            util.handle_character_field_overflow(error, self._resource)
+            util.handle_numeric_field_overflow(error, self._resource)
+            raise error
 
 
 class CandidateModel(Model):
 
     def __init__(self, name, image_name, birthdate, gender, email, phone, tags):
         super(CandidateModel, self).__init__('candidate', 'recruitment', 'candidates', {
-            'name': name,
+            'name': name if name else None,
             'image_path': '%s_%s' % (str2base64(email), image_name),
             'birthdate': birthdate if birthdate else None,
             'gender': gender.upper() if gender else None,
@@ -119,37 +105,17 @@ class CandidateModel(Model):
             _id = db_cur.fetchone()[0]
             return _id
 
-        except psycopg2.IntegrityError as err:
-            msg = 'duplicate key value violates unique constraint "candidates_email_key"'
-            if str(err).startswith(msg):
-                raise util.DatabaseConstraintViolationError(
-                    self._resource, 'email', self.fields['email'],
-                    util.DatabaseConstraintViolationError.UNIQUE
-                )
+        except psycopg2.IntegrityError as error:
+            util.handle_unique_violation(error, self._resource, 'email', self.fields['email'])
+            util.handle_not_null_violation(error, self._resource)
+            raise error
 
-            msg = 'null value in column'
-            if str(err).startswith(msg):
-                raise util.DatabaseConstraintViolationError(
-                    self._resource, None, None,
-                    util.DatabaseConstraintViolationError.NOT_NULL
-                )
-
-            raise err
-
-        except Exception as err:
-            msg = 'invalid input value for enum recruitment.genders'
-            if str(err).startswith(msg):
-                raise util.DatabaseInvalidValueError(self._resource, 'gender')
-
-            msg = 'date/time field value out of range'
-            if str(err).startswith(msg):
-                raise util.DatabaseInvalidValueError(self._resource, 'birthdate')
-
-            msg = 'value too long for type character'
-            if str(err).startswith(msg):
-                raise util.DatabaseInvalidValueError(self._resource, None)
-
-            raise err
+        except Exception as error:
+            util.handle_enum_violation('recruitment.genders', 'gender',
+                error, self._resource)
+            util.handle_date_or_time_out_of_range(error, self._resource, 'birthdate')
+            util.handle_character_field_overflow(error, self._resource)
+            raise error
 
 
 class ExperienceModel(Model):
@@ -172,29 +138,10 @@ class ExperienceModel(Model):
         try:
             db_cur.execute(self.insert_query, values)
 
-        except psycopg2.IntegrityError as err:
-            msg = 'null value in column'
-            if str(err).startswith(msg):
-                raise util.DatabaseConstraintViolationError(
-                    self._resource, None, None,
-                    util.DatabaseConstraintViolationError.NOT_NULL
-                )
+        except psycopg2.IntegrityError as error:
+            util.handle_not_null_violation(error, self._resource)
+            raise error
 
-            print()
-            print('type 1')
-            print(err)
-            print()
-
-            raise err
-
-        except Exception as err:
-            msg = 'date/time field value out of range'
-            if str(err).startswith(msg):
-                raise util.DatabaseInvalidValueError(self._resource, None)
-
-            print()
-            print('type 2')
-            print(err)
-            print()
-
-            raise err
+        except Exception as error:
+            util.handle_date_or_time_out_of_range(error, self._resource, None)
+            raise error
