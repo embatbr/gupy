@@ -29,6 +29,8 @@
 
 ## Running
 
-Execute the script **startup.sh** on your terminal.
+Execute the script **startup.sh** (on directory *back-end/*) on your terminal.
 
 **obs:** ***race condition** issues may be present when running on multiple instances behind a load balancer.*
+
+For testing, go to directory *tests/* and execute the script **test.sh** on your terminal.
