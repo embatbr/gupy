@@ -8,24 +8,11 @@ import json
 import app.util as util
 
 
-embody = lambda req: json.loads(str(req.stream.read(req.content_length), 'utf-8'))
-
-has_payload = lambda body, f: isinstance(body, f) and body
-
-def extract_body(body_type):
-    try:
-        body = embody(req)
-        if not has_payload(body, body_type):
-            raise Exception('Payload must be a non-empty JSON object')
-
-        return body
-
-    except Exception as err:
-        resp.status = falcon.HTTP_400
-        resp.body = json.dumps({
-            'err': str(err)
-        })
-        return None
+def _extract_body(body_type, req, resp):
+    stream = req.stream.read(req.content_length)
+    body = json.loads(str(stream, 'utf-8'))
+    assert isinstance(body, body_type) and body, 'Payload must be a non-empty JSON object'
+    return body
 
 
 class Controller(object):
@@ -33,29 +20,16 @@ class Controller(object):
     def __init__(self, domains):
         self.domains = domains
 
-
-class ProfileController(Controller):
-
-    def on_post(self, req, resp):
-        body = None
-
+    def on_post(self, req, resp, is_batch):
         try:
-            body = embody(req)
-            if not has_payload(body, dict):
-                raise Exception('Payload must be a non-empty JSON object')
-        except Exception as err:
-            resp.status = falcon.HTTP_400
-            resp.body = json.dumps({
-                'err': str(err)
-            })
-            return
+            body = _extract_body(list if is_batch else dict, req, resp)
 
-        try:
-            self.domains['create'].apply([body])
+            self.domains['create'].apply(body if is_batch else [body])
 
             resp.status = falcon.HTTP_200
+            plural = 's' if is_batch else ''
             resp.body = json.dumps({
-                'message': 'Candidate profile successfully created'
+                'message': 'Candidate{0} profile{0} successfully created'.format(plural)
             })
 
         except Exception as err:
@@ -65,6 +39,12 @@ class ProfileController(Controller):
             resp.body = json.dumps({
                 'err': err.show() if is_domain_err else str(err)
             })
+
+
+class ProfileController(Controller):
+
+    def on_post(self, req, resp):
+        super(ProfileController, self).on_post(req, resp, False)
 
     def on_get(self, req, resp):
         params = req.params
@@ -87,31 +67,4 @@ class ProfileController(Controller):
 class ProfileBatchController(Controller):
 
     def on_post(self, req, resp):
-        body = None
-
-        try:
-            body = embody(req)
-            if not has_payload(body, list):
-                raise Exception('Payload must be a non-empty JSON object')
-        except Exception as err:
-            resp.status = falcon.HTTP_400
-            resp.body = json.dumps({
-                'err': str(err)
-            })
-            return
-
-        try:
-            self.domains['create'].apply(body)
-
-            resp.status = falcon.HTTP_200
-            resp.body = json.dumps({
-                'message': 'Batch of candidate profiles successfully created'
-            })
-
-        except Exception as err:
-            is_domain_err = isinstance(err, util.DomainError)
-
-            resp.status = falcon.HTTP_403 if is_domain_err else falcon.HTTP_400
-            resp.body = json.dumps({
-                'err': err.show() if is_domain_err else str(err)
-            })
+        super(ProfileBatchController, self).on_post(req, resp, True)
