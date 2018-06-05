@@ -91,18 +91,3 @@ def gen_json_data(name, photo, email, gender):
             }
         ]
     }
-
-
-def test(name, expected, resp):
-    try:
-        print("'{}'".format(name))
-        print('expected:', expected)
-        print('given:', resp.status_code)
-        print('result:', end=' ')
-        assert resp.status_code == expected
-        print('SUCCESS')
-    except AssertionError as err:
-        print('FAILURE')
-    finally:
-        print(resp.text)
-        print()

@@ -81,13 +81,13 @@ class DomainCreate(Domain):
                 raise util.DomainError('create', err.resource, reason)
 
             if err.constraint == util.DatabaseConstraintViolationError.NOT_NULL:
-                reason = "Null value for non-nullable field"
+                reason = 'Null value for non-nullable field'
                 raise util.DomainError('create', err.resource, reason)
 
             raise err
 
         except util.DatabaseInvalidValueError as err:
-            reason = "Value invalid or too long for field"
+            reason = 'Value invalid or too long for field'
             if err.field_name:
                 reason = "%s '%s'" % (reason, err.field_name)
             raise util.DomainError('create', err.resource, reason)
