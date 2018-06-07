@@ -34,3 +34,13 @@ Execute the script **startup.sh** (on directory *back-end/*) on your terminal.
 **obs:** ***race condition** issues may be present when running on multiple instances behind a load balancer.*
 
 For testing, go to directory *tests/* and execute the script **test.sh** on your terminal.
+
+## Improvements
+
+- [ ] Validate all models before any call for save():
+    - Probably on creation (for loop in CreateAction.execute);
+    - Avoids waste connection with broken data.
+- [ ] Handle requests asynchronously:
+    - During database writing the app is idle;
+    - Needs a database connection pool;
+    - May suffer from race condition issues.
