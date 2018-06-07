@@ -56,9 +56,9 @@ class AddressModel(Model):
             'place_name': place_name if place_name else None,
             'place_number': place_number if place_number else None,
             'place_complement': place_complement if place_complement else None,
+            'cep': cep if cep else None,
             'latitude': latitude if latitude else None,
-            'longitude': longitude if longitude else None,
-            'cep': cep if cep else None
+            'longitude': longitude if longitude else None
         })
 
     def save(self, db_cur):

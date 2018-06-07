@@ -31,11 +31,11 @@ model_inits = {
 
 routes = {
     'profile': controllers.ProfileController({
-        'create': domains.DomainCreate(settings.DB_CONNECTION, model_inits),
-        'read': domains.DomainRead(settings.DB_CONNECTION, model_inits)
+        'create': domains.DomainCreate(settings.DB_CONNECTION['writer'], model_inits),
+        'read': domains.DomainRead(settings.DB_CONNECTION['reader'], model_inits)
     }),
     'profiles': controllers.ProfileBatchController({
-        'create': domains.DomainCreate(settings.DB_CONNECTION, model_inits)
+        'create': domains.DomainCreate(settings.DB_CONNECTION['writer'], model_inits)
     })
 }
 

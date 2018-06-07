@@ -68,4 +68,14 @@ CREATE TABLE recruitment.experiences (
 );
 
 
+GRANT USAGE ON SCHEMA recruitment TO gupy_writer, gupy_reader;
+GRANT USAGE ON TYPE recruitment.brazilian_states TO gupy_writer, gupy_reader;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA recruitment TO gupy_writer, gupy_reader;
+
+GRANT SELECT ON ALL TABLES IN SCHEMA recruitment TO gupy_writer, gupy_reader;
+GRANT INSERT ON ALL TABLES IN SCHEMA recruitment TO gupy_writer;
+GRANT UPDATE ON ALL TABLES IN SCHEMA recruitment TO gupy_writer;
+GRANT DELETE ON ALL TABLES IN SCHEMA recruitment TO gupy_writer;
+
+
 COMMIT;
