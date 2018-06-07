@@ -37,7 +37,8 @@ class Model(object):
         field_names = self._get_fields()
         field_refs = ['%({})s'.format(field_name) for field_name in field_names]
 
-        return "INSERT INTO {schema}.{table} ({fields}) VALUES ({values}) RETURNING id".format(**{
+        sql = "INSERT INTO {schema}.{table} ({fields}) VALUES ({values}) RETURNING id"
+        return sql.format(**{
             'schema': self._pg_schema_name,
             'table': self._pg_table_name,
             'fields': ", ".join(field_names),

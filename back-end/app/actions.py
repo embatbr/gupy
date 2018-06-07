@@ -1,4 +1,4 @@
-"""Problems' domains (aka business logic).
+"""CRUD actions.
 """
 
 
@@ -7,16 +7,16 @@ import psycopg2
 import app.util as util
 
 
-class Domain(object):
+class Action(object):
 
     def __init__(self, db_conn_params, model_inits):
         self.db_conn_params = db_conn_params
         self.model_inits = model_inits
 
 
-class DomainCreate(Domain):
+class CreateAction(Action):
 
-    def apply(self, artifacts):
+    def execute(self, artifacts):
         batch_models = list()
 
         for artifact in artifacts:
@@ -78,11 +78,11 @@ class DomainCreate(Domain):
         except util.DatabaseConstraintViolationError as err:
             if err.constraint == util.DatabaseConstraintViolationError.UNIQUE:
                 reason = "%s '%s' already exists" % (err.field_name, err.field_value)
-                raise util.DomainError('create', err.resource, reason)
+                raise util.ActionError('create', err.resource, reason)
 
             if err.constraint == util.DatabaseConstraintViolationError.NOT_NULL:
                 reason = 'Null value for non-nullable field'
-                raise util.DomainError('create', err.resource, reason)
+                raise util.ActionError('create', err.resource, reason)
 
             raise err
 
@@ -90,15 +90,15 @@ class DomainCreate(Domain):
             reason = 'Value invalid or too long for field'
             if err.field_name:
                 reason = "%s '%s'" % (reason, err.field_name)
-            raise util.DomainError('create', err.resource, reason)
+            raise util.ActionError('create', err.resource, reason)
 
         finally:
             db_conn.close()
 
 
-class DomainRead(Domain):
+class ReadAction(Action):
 
-    def apply(self, params):
+    def execute(self, params):
         return {
             'message': "Sorry, I'm very tired. Gonna sleep."
         }

@@ -36,7 +36,7 @@ class DatabaseInvalidValueError(Exception):
         self.field_name = field_name
 
 
-class DomainError(Exception):
+class ActionError(Exception):
 
     def __init__(self, action, resource, reason):
         self.action = action

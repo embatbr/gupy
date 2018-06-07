@@ -5,7 +5,7 @@
 import falcon
 
 import app.controllers as controllers
-import app.domains as domains
+import app.actions as actions
 import app.models as models
 import app.settings as settings
 
@@ -31,11 +31,11 @@ model_inits = {
 
 routes = {
     'profile': controllers.ProfileController({
-        'create': domains.DomainCreate(settings.DB_CONNECTION['writer'], model_inits),
-        'read': domains.DomainRead(settings.DB_CONNECTION['reader'], model_inits)
+        'create': actions.CreateAction(settings.DB_CONNECTION['writer'], model_inits),
+        'read': actions.ReadAction(settings.DB_CONNECTION['reader'], model_inits)
     }),
     'profiles': controllers.ProfileBatchController({
-        'create': domains.DomainCreate(settings.DB_CONNECTION['writer'], model_inits)
+        'create': actions.CreateAction(settings.DB_CONNECTION['writer'], model_inits)
     })
 }
 

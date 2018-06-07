@@ -20,8 +20,8 @@ def _extract_payload(payload_type, req, resp):
 
 class Controller(object):
 
-    def __init__(self, domains):
-        self.domains = domains
+    def __init__(self, actions):
+        self.actions = actions
 
     # TODO create a "_exec_request" method to encapsulate all "on_" methods
 
@@ -29,7 +29,7 @@ class Controller(object):
         try:
             payload = _extract_payload(list if is_batch else dict, req, resp)
 
-            self.domains['create'].apply(payload if is_batch else [payload])
+            self.actions['create'].execute(payload if is_batch else [payload])
 
             plural = 's' if is_batch else ''
             resp.status = falcon.HTTP_200
@@ -38,11 +38,11 @@ class Controller(object):
             })
 
         except Exception as err:
-            is_domain_err = isinstance(err, util.DomainError)
+            is_action_err = isinstance(err, util.ActionError)
 
-            resp.status = falcon.HTTP_403 if is_domain_err else falcon.HTTP_400
+            resp.status = falcon.HTTP_403 if is_action_err else falcon.HTTP_400
             resp.body = json.dumps({
-                'err': err.show() if is_domain_err else str(err)
+                'err': err.show() if is_action_err else str(err)
             })
 
 
@@ -55,17 +55,17 @@ class ProfileController(Controller):
         try:
             params = req.params
 
-            profile = self.domains['read'].apply(params)
+            profile = self.actions['read'].execute(params)
 
             resp.status = falcon.HTTP_200
             resp.body = json.dumps(profile)
 
         except Exception as err:
-            is_domain_err = isinstance(err, util.DomainError)
+            is_action_err = isinstance(err, util.ActionError)
 
-            resp.status = falcon.HTTP_403 if is_domain_err else falcon.HTTP_400
+            resp.status = falcon.HTTP_403 if is_action_err else falcon.HTTP_400
             resp.body = json.dumps({
-                'err': err.show() if is_domain_err else str(err)
+                'err': err.show() if is_action_err else str(err)
             })
 
 
